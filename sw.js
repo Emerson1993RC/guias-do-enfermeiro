@@ -1,6 +1,6 @@
 /* Service worker: deixa o app 100% offline.
    Ao alterar qualquer conteúdo, suba VERSAO para os aparelhos baixarem a atualização. */
-const VERSAO = "1.1.1";
+const VERSAO = "1.1.2";
 const CACHE = "guias-aps-" + VERSAO;
 
 importScripts("guias/registro.js");
@@ -20,8 +20,9 @@ const BASE = [
 // O PDF original (grande) não entra no pré-cache: fica salvo na primeira vez que for aberto.
 const ARQUIVOS = BASE.concat(...(self.GUIAS || []).map((g) => g.arquivos));
 
+// cache: "reload" ignora o cache HTTP do navegador, para não guardar arquivos da versão anterior.
 self.addEventListener("install", (e) => {
-  e.waitUntil(caches.open(CACHE).then((c) => c.addAll(ARQUIVOS)).then(() => self.skipWaiting()));
+  e.waitUntil(caches.open(CACHE).then((c) => c.addAll(ARQUIVOS.map((u) => new Request(u, { cache: "reload" })))).then(() => self.skipWaiting()));
 });
 
 self.addEventListener("activate", (e) => {
