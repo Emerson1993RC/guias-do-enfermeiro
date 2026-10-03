@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1d6fd8"/>
+      <stop offset="1" stop-color="#0b2545"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#g)"/>
+  <!-- livro aberto -->
+  <path d="M96 150c56-22 112-22 160 10v236c-48-32-104-32-160-10z" fill="#ffffff" opacity=".95"/>
+  <path d="M416 150c-56-22-112-22-160 10v236c48-32 104-32 160-10z" fill="#dbe9fb"/>
+  <!-- cápsula -->
+  <g transform="rotate(-35 330 250)">
+    <rect x="270" y="222" width="130" height="56" rx="28" fill="#0b2545"/>
+    <rect x="335" y="222" width="65" height="56" rx="28" fill="#5aa2ff"/>
+    <rect x="335" y="222" width="20" height="56" fill="#5aa2ff"/>
+  </g>
+  <!-- cruz -->
+  <path d="M150 210h28v-28h24v28h28v24h-28v28h-24v-28h-28z" fill="#1d6fd8"/>
+</svg>

@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Guias Clínicos APS</title>
+  <meta name="description" content="Consulta rápida e offline de guias clínicos para a Atenção Primária.">
+  <meta name="theme-color" content="#0b2545">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="stylesheet" href="app.css">
+</head>
+<body>
+  <header class="topo">
+    <div class="topo-inner">
+      <a class="marca" href="#/" aria-label="Início">
+        <img src="icons/icon.svg" alt="" width="40" height="40">
+        <span>
+          <small id="topo-eyebrow">Guias clínicos · offline</small>
+          <strong id="topo-titulo">Guias Clínicos APS</strong>
+        </span>
+      </a>
+      <div class="topo-acoes">
+        <span id="status-offline" class="pill-status" hidden>Offline</span>
+        <button id="btn-instalar" class="btn-topo" hidden>Instalar app</button>
+        <button id="btn-busca" class="btn-topo btn-busca" aria-label="Pesquisar">
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="m20 20-3.5-3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          <span>Pesquisar</span><kbd>/</kbd>
+        </button>
+      </div>
+    </div>
+    <nav id="atalhos" class="atalhos" aria-label="Acessos rápidos"></nav>
+  </header>
+
+  <main id="app" tabindex="-1"></main>
+
+  <footer class="rodape">
+    <p>Ferramenta de apoio à decisão clínica. Confirme a conduta final conforme o quadro do paciente e as diretrizes institucionais vigentes.</p>
+    <p id="rodape-versao"></p>
+  </footer>
+
+  <div id="busca" class="busca" hidden role="dialog" aria-modal="true" aria-label="Pesquisar nos guias">
+    <div class="busca-caixa">
+      <div class="busca-campo">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="m20 20-3.5-3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <input id="busca-input" type="search" placeholder="Diagnóstico, medicamento ou tópico (ex.: amoxicilina, sífilis, gestante)" autocomplete="off">
+        <button id="busca-fechar" class="busca-fechar" aria-label="Fechar">Esc</button>
+      </div>
+      <div id="busca-resultados" class="busca-resultados"></div>
+    </div>
+  </div>
+
+  <!-- registro.js lista os guias; app.js carrega os arquivos de cada guia -->
+  <script src="guias/registro.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
