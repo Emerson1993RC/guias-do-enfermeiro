@@ -1,4 +1,4 @@
-# Guias do Enfermeiro — Guias Clínicos APS (offline)
+# Guia + Enfermagem — protocolos para seguir à risca (offline)
 
 App web instalável (PWA) para consulta rápida de guias clínicos na Atenção Primária.
 Depois do primeiro acesso, funciona **sem internet**.

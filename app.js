@@ -1,4 +1,4 @@
-/* Guias Clínicos APS — app offline (PWA) sem dependências.
+/* Guia + Enfermagem — app offline (PWA) sem dependências.
    Rotas (hash):  #/                      biblioteca de guias
                   #/<guia>                página inicial do guia (índice por grupos)
                   #/<guia>/<topico>?q=..  tópico (q destaca o termo buscado) */
@@ -54,9 +54,9 @@
   }
 
   function montarTopo(g) {
-    $("#topo-eyebrow").textContent = g ? "Guia clínico · offline" : "Guias clínicos · offline";
-    $("#topo-titulo").textContent = g ? g.titulo : "Guias Clínicos APS";
-    document.title = g ? `${g.titulo} · Guias Clínicos APS` : "Guias Clínicos APS";
+    $("#topo-eyebrow").textContent = g ? "Guia + Enfermagem · offline" : "Protocolos para seguir à risca";
+    $("#topo-titulo").textContent = g ? g.titulo : "Guia + Enfermagem";
+    document.title = g ? `${g.titulo} · Guia + Enfermagem` : "Guia + Enfermagem";
     const nav = $("#atalhos");
     nav.innerHTML = g && g.atalhos
       ? `<span class="rotulo">Acessos rápidos</span>` + g.atalhos.map((a) => `<a class="chip-topo" href="#/${g.id}/${a.topico}">${esc(a.rotulo)}</a>`).join("")
@@ -69,8 +69,8 @@
       <section class="card hero">
         <div>
           <p class="eyebrow">Biblioteca</p>
-          <h1>Guias Clínicos para a Atenção Primária</h1>
-          <p>Consulta rápida de protocolos, condutas e posologias — funciona <b>sem internet</b> depois do primeiro acesso. Instale no celular para abrir como um aplicativo.</p>
+          <h1>Guia + Enfermagem</h1>
+          <p><b>Protocolos para seguir à risca.</b> Consulta rápida de condutas e posologias — funciona <b>sem internet</b> depois do primeiro acesso. Instale no celular para abrir como um aplicativo.</p>
           <div class="acoes-hero"><button class="btn primario" data-abrir-busca>Pesquisar em todos os guias</button></div>
         </div>
         <aside class="como-usar">
