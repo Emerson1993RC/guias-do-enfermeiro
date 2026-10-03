@@ -75,7 +75,7 @@
         </div>
         <aside class="como-usar">
           <strong>Como usar na rotina</strong>
-          <ol><li>Escolha um guia abaixo.</li><li>Navegue pelos grupos clínicos ou use a busca (tecla <b>/</b>).</li><li>No celular: menu do navegador → “Adicionar à tela inicial”.</li></ol>
+          <ol><li><span>Escolha um guia abaixo.</span></li><li><span>Navegue pelos grupos clínicos ou use a busca (tecla <b>/</b>).</span></li><li><span>No celular: menu do navegador → “Adicionar à tela inicial”.</span></li></ol>
         </aside>
       </section>
       <div class="biblioteca">
