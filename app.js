@@ -676,7 +676,8 @@
   /* ---------- PWA ---------- */
   let promptInstalar = null;
   // Já aberto como app instalado: não oferece instalar de novo.
-  const instalado = () => matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
+  // Só mostra o botão dentro do navegador comum (display-mode: browser).
+  const instalado = () => !matchMedia("(display-mode: browser)").matches || navigator.standalone === true;
   window.addEventListener("beforeinstallprompt", (e) => { e.preventDefault(); promptInstalar = e; $("#btn-instalar").hidden = instalado(); });
   $("#btn-instalar").addEventListener("click", async () => {
     if (!promptInstalar) return;
@@ -685,6 +686,7 @@
     promptInstalar = null;
     $("#btn-instalar").hidden = true;
   });
+  window.addEventListener("appinstalled", () => { promptInstalar = null; $("#btn-instalar").hidden = true; });
   const statusRede = () => { $("#status-offline").hidden = navigator.onLine; };
   window.addEventListener("online", statusRede);
   window.addEventListener("offline", statusRede);

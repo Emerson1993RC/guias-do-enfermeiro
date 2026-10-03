@@ -1,6 +1,6 @@
 /* Service worker: deixa o app 100% offline.
    Ao alterar qualquer conteúdo, suba VERSAO para os aparelhos baixarem a atualização. */
-const VERSAO = "1.1.2";
+const VERSAO = "1.1.3";
 const CACHE = "guias-aps-" + VERSAO;
 
 importScripts("guias/registro.js");
