@@ -75,7 +75,7 @@
         </div>
         <aside class="como-usar">
           <strong>Como usar na rotina</strong>
-          <ol><li><span>Escolha um guia abaixo.</span></li><li><span>Navegue pelos grupos clínicos ou use a busca (tecla <b>/</b>).</span></li><li><span>No celular: menu do navegador → “Adicionar à tela inicial”.</span></li></ol>
+          <ol><li><span>Escolha um guia abaixo.</span></li><li><span>Navegue pelos grupos clínicos ou use a busca (tecla <b>/</b>).</span></li><li><span>No celular: menu do navegador → “Instalar app”.</span></li></ol>
         </aside>
       </section>
       <div class="biblioteca">
@@ -675,7 +675,9 @@
 
   /* ---------- PWA ---------- */
   let promptInstalar = null;
-  window.addEventListener("beforeinstallprompt", (e) => { e.preventDefault(); promptInstalar = e; $("#btn-instalar").hidden = false; });
+  // Já aberto como app instalado: não oferece instalar de novo.
+  const instalado = () => matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
+  window.addEventListener("beforeinstallprompt", (e) => { e.preventDefault(); promptInstalar = e; $("#btn-instalar").hidden = instalado(); });
   $("#btn-instalar").addEventListener("click", async () => {
     if (!promptInstalar) return;
     promptInstalar.prompt();
