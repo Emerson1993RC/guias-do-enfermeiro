@@ -226,6 +226,9 @@
       case "sepse": return renderSepse(s, id);
       case "calc": return renderCalcPed(s, id);
       case "ccr": return renderCcr(s, id);
+      case "pqtu": return renderPqtu(s, id);
+      case "desmame": return renderDesmame(s, id);
+      case "gif": return renderGif(s, id);
       default: return "";
     }
   }
@@ -442,6 +445,54 @@
       </section>`;
   }
 
+  /* ---------- ferramentas do guia de hanseníase (PCDT 2022) ---------- */
+  function renderPqtu(s, id) {
+    return `
+      <section class="card bloco" id="${id}">
+        <h2>${s.titulo}</h2>
+        <div class="ferramenta" data-ferramenta="pqtu">
+          <div class="campos">
+            <div class="campo"><label for="${id}-peso">Peso (kg)</label><input id="${id}-peso" type="number" min="1" max="250" step="0.1" inputmode="decimal" placeholder="ex.: 22"></div>
+            <div class="campo"><label for="${id}-cl">Classificação operacional</label><select id="${id}-cl"><option value="MB">Multibacilar (MB) — 12 doses</option><option value="PB">Paucibacilar (PB) — 6 doses</option></select></div>
+          </div>
+          <div class="resultado" data-saida>Informe o peso.</div>
+          <p class="nota">Conforme o Quadro 1 do PCDT: acima de 50 kg → PQT-U Adulto; de 30 a 50 kg → PQT-U Infantil; abaixo de 30 kg → doses por mg/kg (adaptação da PQT-U Infantil). Alta: PB com 6 doses em até 9 meses; MB com 12 doses em até 18 meses.</p>
+        </div>
+      </section>`;
+  }
+
+  function renderDesmame(s, id) {
+    return `
+      <section class="card bloco" id="${id}">
+        <h2>${s.titulo}</h2>
+        <div class="ferramenta" data-ferramenta="desmame">
+          <div class="campos">
+            <div class="campo"><label for="${id}-peso">Peso (kg)</label><input id="${id}-peso" type="number" min="5" max="250" step="0.1" inputmode="decimal" placeholder="ex.: 60"></div>
+            <div class="campo"><label for="${id}-ini">Data de início (opcional)</label><input id="${id}-ini" type="date"></div>
+          </div>
+          <div class="resultado" data-saida>Informe o peso.</div>
+          <div data-tabela></div>
+          <p class="nota">Esquema do PCDT para reações hansênicas: prednisona 1 mg/kg/dia, reduzindo em torno de 10 mg a cada 15 dias; a partir de 20 mg/dia, reduzir 5 mg a cada 15 dias; 5 mg/dia por 15 dias e depois 5 mg em dias alternados por mais 15 dias. Dose inicial arredondada para múltiplo de 5 mg (comprimidos de 5 e 20 mg). O PCDT orienta manter a corticoterapia, em média, por <b>no mínimo seis meses</b>: ajuste o ritmo da redução conforme a resposta clínica e a função neural (ANS). Iniciar com profilaxia de estrongiloidíase (albendazol 400 mg/dia por 3 dias ou ivermectina 200 mcg/kg dose única). Ferramenta de apoio — não substitui a avaliação clínica.</p>
+        </div>
+      </section>`;
+  }
+
+  const GIF_PARTES = [["Olho direito", "Olho esquerdo"], ["Mão direita", "Mão esquerda"], ["Pé direito", "Pé esquerdo"]];
+  function renderGif(s, id) {
+    let n = 0;
+    return `
+      <section class="card bloco" id="${id}">
+        <h2>${s.titulo}</h2>
+        <div class="ferramenta" data-ferramenta="gif">
+          <div class="campos">
+            ${GIF_PARTES.flat().map((parte) => { const k = n++; return `<div class="campo"><label for="${id}-g${k}">${parte}</label><select id="${id}-g${k}"><option value="0">Grau 0</option><option value="1">Grau 1</option><option value="2">Grau 2</option></select></div>`; }).join("")}
+          </div>
+          <div class="resultado" data-saida></div>
+          <p class="nota">GIF do paciente = maior grau encontrado. OMP = soma dos graus dos dois olhos, das duas mãos e dos dois pés (0 a 12). Critérios de cada grau: ver <a href="#/hanseniase/ans-gif">ANS e grau de incapacidade</a>. Graus 1 e 2 só são atribuídos à hanseníase quando excluídas outras causas.</p>
+        </div>
+      </section>`;
+  }
+
   const fmt = (n) => (Math.round(n * 10) / 10).toLocaleString("pt-BR");
 
   function ligarFerramentas(raiz) {
@@ -531,6 +582,71 @@
         out.innerHTML = `<span class="grande">${fmt(v)} mL/min</span><br>Use a faixa correspondente na coluna “Insuficiência renal” da tabela abaixo (ex.: 30-50, 10-30, &lt;10).`;
       };
       el.addEventListener("input", upd); el.addEventListener("change", upd); upd();
+    });
+
+    $$('[data-ferramenta="pqtu"]', raiz).forEach((el) => {
+      const peso = $("input", el), cl = $("select", el), out = $("[data-saida]", el);
+      const upd = () => {
+        const p = parseFloat(String(peso.value).replace(",", "."));
+        const doses = cl.value === "MB" ? "12 doses mensais (MB) em até 18 meses" : "6 doses mensais (PB) em até 9 meses";
+        if (!(p > 0)) { out.className = "resultado"; out.textContent = "Informe o peso."; return; }
+        out.className = "resultado";
+        if (p > 50) {
+          out.innerHTML = `<span class="grande">PQT-U Adulto</span> · ${fmt(p)} kg · ${doses}<br>` +
+            `<b>Dose mensal supervisionada:</b> rifampicina 600 mg + clofazimina 300 mg + dapsona 100 mg<br>` +
+            `<b>Dose diária autoadministrada:</b> clofazimina 50 mg diariamente + dapsona 100 mg diariamente`;
+        } else if (p >= 30) {
+          out.innerHTML = `<span class="grande">PQT-U Infantil</span> · ${fmt(p)} kg · ${doses}<br>` +
+            `<b>Dose mensal supervisionada:</b> rifampicina 450 mg + clofazimina 150 mg + dapsona 50 mg<br>` +
+            `<b>Dose diária autoadministrada:</b> clofazimina 50 mg em dias alternados + dapsona 50 mg diariamente`;
+        } else {
+          const rif = 10 * p, cloM = 6 * p, dapM = 2 * p, cloD = 1 * p, dapD = 2 * p;
+          out.innerHTML = `<span class="grande">Adaptação da PQT-U Infantil (&lt; 30 kg)</span> · ${fmt(p)} kg · ${doses}<br>` +
+            `<b>Dose mensal supervisionada:</b> rifampicina ${fmt(rif)} mg (10 mg/kg = ${fmt(rif / 20)} mL da suspensão 20 mg/mL) + clofazimina ${fmt(cloM)} mg (6 mg/kg) + dapsona ${fmt(dapM)} mg (2 mg/kg)<br>` +
+            `<b>Dose diária autoadministrada:</b> clofazimina ${fmt(cloD)} mg/dia (1 mg/kg/dia) + dapsona ${fmt(dapD)} mg/dia (2 mg/kg/dia)<br>` +
+            `<small>Clofazimina diária: total semanal de ${fmt(cloD * 7)} mg — como só há cápsulas de 50 e 100 mg, dividir a dose semanal em 2 ou 3 tomadas (ex. do PCDT: 15 kg → 105 mg/semana → 50 mg duas vezes por semana).</small>`;
+        }
+      };
+      el.addEventListener("input", upd); el.addEventListener("change", upd); upd();
+    });
+
+    $$('[data-ferramenta="desmame"]', raiz).forEach((el) => {
+      const [peso, ini] = $$("input", el), out = $("[data-saida]", el), tab = $("[data-tabela]", el);
+      const dataBr = (d) => d.toLocaleDateString("pt-BR", { timeZone: "UTC" });
+      const upd = () => {
+        const p = parseFloat(String(peso.value).replace(",", "."));
+        if (!(p > 0)) { out.className = "resultado"; out.textContent = "Informe o peso."; tab.innerHTML = ""; return; }
+        let dose = Math.max(5, Math.round(p / 5) * 5);
+        const etapas = [];
+        while (dose > 20) { etapas.push(dose); dose = Math.max(20, dose - 10); }
+        while (dose > 5) { etapas.push(dose); dose -= 5; }
+        etapas.push(5);
+        const linhas = etapas.map((d) => [`${d} mg/dia`]);
+        linhas.push(["5 mg em dias alternados"]);
+        const base = ini.value ? new Date(ini.value + "T00:00:00Z") : null;
+        const rows = linhas.map(([txt], k) => {
+          const de = k * 15 + 1, ate = (k + 1) * 15;
+          let periodo = `Dias ${de} a ${ate}`;
+          if (base) { const a = new Date(base.getTime() + (de - 1) * 864e5), b = new Date(base.getTime() + (ate - 1) * 864e5); periodo += ` (${dataBr(a)} a ${dataBr(b)})`; }
+          return `<tr><td data-label="Período">${periodo}</td><td data-label="Prednisona">${txt}</td></tr>`;
+        }).join("");
+        const total = linhas.length * 15;
+        out.className = "resultado";
+        out.innerHTML = `<span class="grande">Início: ${etapas[0]} mg/dia</span> (1 mg/kg/dia · ${fmt(p)} kg)<br>Cronograma-base de ${total} dias (${linhas.length} etapas de 15 dias). Mantenha, em média, no mínimo 6 meses, ajustando conforme a resposta.`;
+        tab.innerHTML = `<div class="tabela-wrap"><table class="empilha"><thead><tr><th>Período</th><th>Prednisona</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+      };
+      el.addEventListener("input", upd); el.addEventListener("change", upd); upd();
+    });
+
+    $$('[data-ferramenta="gif"]', raiz).forEach((el) => {
+      const out = $("[data-saida]", el);
+      const upd = () => {
+        const v = $$("select", el).map((x) => +x.value);
+        const gif = Math.max(...v), omp = v.reduce((a, b) => a + b, 0);
+        out.className = "resultado " + (gif === 0 ? "baixo" : gif === 1 ? "medio" : "alto");
+        out.innerHTML = `<span class="grande">GIF ${gif}</span> · escore OMP = ${omp}` + (gif === 2 ? "<br>Grau 2 no diagnóstico indica detecção tardia." : "");
+      };
+      el.addEventListener("change", upd); upd();
     });
 
     $$("[data-filtro]", raiz).forEach((inp) => {

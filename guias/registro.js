@@ -36,5 +36,31 @@ self.GUIAS = [
       { rotulo: "Ajuste renal", topico: "posologia-adulto-renal" },
       { rotulo: "Profilaxia odontologia", topico: "odontologia" }
     ]
+  },
+  {
+    id: "hanseniase",
+    sigla: "HAN",
+    titulo: "Hanseníase",
+    subtitulo: "Protocolo Clínico e Diretrizes Terapêuticas (PCDT) da Hanseníase — 2022",
+    fonte: "Ministério da Saúde · Portaria SCTIE/MS nº 67/2022",
+    pdf: "guias/hanseniase/pcdt-hanseniase-2022.pdf",
+    cor: "#7b3fa0",
+    arquivos: [
+      "guias/hanseniase/topicos-1.js",
+      "guias/hanseniase/topicos-2.js"
+    ],
+    grupos: [
+      { id: "diagnostico", sigla: "DX", eyebrow: "Suspeição e classificação", nome: "Diagnóstico" },
+      { id: "tratamento", sigla: "TX", eyebrow: "Poliquimioterapia", nome: "Tratamento (PQT-U)" },
+      { id: "reacoes", sigla: "RE", eyebrow: "Reações e neurites", nome: "Reações hansênicas" },
+      { id: "seguimento", sigla: "SG", eyebrow: "Acompanhamento e vigilância", nome: "Seguimento e contatos" },
+      { id: "utilitarios", sigla: "UC", eyebrow: "Apoio à decisão", nome: "Utilitários clínicos" }
+    ],
+    atalhos: [
+      { rotulo: "PQT-U", topico: "pqtu" },
+      { rotulo: "Reação tipo 1", topico: "reacao-tipo1" },
+      { rotulo: "Contatos e BCG", topico: "contatos" },
+      { rotulo: "Grau de incapacidade", topico: "calc-gif" }
+    ]
   }
 ];

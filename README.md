@@ -12,6 +12,9 @@ Primeiro documento incluído:
 - ferramentas: Escore de Centor, critérios de antimicrobiano na diarreia, triagem de sepse, calculadora de dose pediátrica (mg/kg) e clearance de creatinina (Cockcroft-Gault);
 - PDF original disponível para abrir.
 
+Segundo documento incluído:
+**Hanseníase — Protocolo Clínico e Diretrizes Terapêuticas (PCDT) da Hanseníase** (Ministério da Saúde, 2022 — Portaria SCTIE/MS nº 67/2022) — 23 tópicos em 5 grupos (diagnóstico, PQT-U, reações, seguimento e contatos, utilitários), com calculadora de dose da PQT-U, cronograma de desmame de prednisona e calculadora de grau de incapacidade física (GIF/OMP).
+
 > Ferramenta de apoio. O conteúdo foi transcrito do PDF oficial; confirme sempre a conduta conforme o quadro do paciente e as diretrizes vigentes.
 
 ## Como usar no celular
@@ -44,7 +47,7 @@ guias/<id>/topicos-N.js  conteúdo de cada documento
      ]);
    ```
 
-   Tipos de seção disponíveis: `texto`, `lista`, `box` (`v`: diag | trat | alerta | info), `esquemas`, `tabela`, `fluxo`, `duas`, `decisao`, `centor`, `sepse`, `calc`, `ccr`.
+   Tipos de seção disponíveis: `texto`, `lista`, `box` (`v`: diag | trat | alerta | info), `esquemas`, `tabela`, `fluxo`, `duas`, `decisao`, `centor`, `sepse`, `calc`, `ccr`, `pqtu`, `desmame`, `gif`.
 
 2. Registre o documento em `guias/registro.js` (id, título, grupos, atalhos e a lista `arquivos`).
 3. Em `sw.js`, aumente `VERSAO` (ex.: `1.0.0` → `1.1.0`) para os aparelhos baixarem a novidade.
