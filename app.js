@@ -184,7 +184,7 @@
           <header class="card topico-cab">
             <div class="titulo-linha"><span class="num">${esc(t.num)}</span><h1>${esc(t.titulo)}</h1><span class="badge">${esc(gr.nome)}</span></div>
             <nav class="navsec" aria-label="Seções do tópico">${secoes.filter((x) => x.s.titulo).map((x) => `<a href="#${x.id}" data-sec="${x.id}">${esc(textoPuro(x.s.titulo))}</a>`).join("")}</nav>
-            <div class="fonte-pag">Fonte: ${esc(g.titulo)} — pág. ${t.pag} do guia.</div>
+            <div class="fonte-pag">${t.fonte ? `Fonte: ${esc(t.fonte)} — pág. ${t.pag}.` : `Fonte: ${esc(g.titulo)} — pág. ${t.pag} do guia.`}</div>
           </header>
           ${secoes.map(({ s, id }) => renderSecao(s, id)).join("")}
           <nav class="prox-ant">
@@ -229,6 +229,9 @@
       case "pqtu": return renderPqtu(s, id);
       case "desmame": return renderDesmame(s, id);
       case "gif": return renderGif(s, id);
+      case "checklist": return renderChecklist(s, id);
+      case "hipo": return renderHipo(s, id);
+      case "insulina": return renderInsulina(s, id);
       default: return "";
     }
   }
@@ -493,6 +496,67 @@
       </section>`;
   }
 
+  /* ---------- ferramentas do guia de insulinoterapia ---------- */
+  function renderChecklist(s, id) {
+    return `
+      <section class="card bloco" id="${id}">
+        <h2>${s.titulo}</h2>
+        <div class="ferramenta" data-ferramenta="checklist">
+          <div class="checks">
+            ${s.itens.map(([t, q]) => `<label class="check"><input type="checkbox"><span><b>${t}</b><br><small>${q}</small></span></label>`).join("")}
+          </div>
+          <div class="resultado" data-saida></div>
+        </div>
+      </section>`;
+  }
+
+  function renderHipo(s, id) {
+    return `
+      <section class="card bloco" id="${id}">
+        <h2>${s.titulo}</h2>
+        <div class="ferramenta" data-ferramenta="hipo">
+          <div class="campos">
+            <div class="campo"><label for="${id}-peso">Peso da criança (kg)</label><input id="${id}-peso" type="number" min="1" max="80" step="0.1" inputmode="decimal" placeholder="ex.: 20"></div>
+          </div>
+          <div class="resultado" data-saida>Informe o peso.</div>
+          <p class="nota">Criança consciente e capaz de engolir com segurança: <b>0,3 g de carboidrato de rápida absorção por kg</b>. Reavaliar a glicemia em 15 minutos; se ainda &lt; 70 mg/dL, repetir a mesma quantidade e checar de novo após 15 minutos. Se houver hiperglicemia excessiva depois da correção, a equipe reavalia a quantidade para os próximos episódios.</p>
+        </div>
+      </section>`;
+  }
+
+  function renderInsulina(s, id) {
+    const campo = (k, rot, ph, extra = "") => `<div class="campo"><label for="${id}-${k}">${rot}</label><input id="${id}-${k}" data-k="${k}" type="number" min="0" step="0.1" inputmode="decimal" placeholder="${ph}" ${extra}></div>`;
+    return `
+      <section class="card bloco" id="${id}">
+        <h2>${s.titulo}</h2>
+        <div class="ferramenta" data-ferramenta="insulina">
+          <h3 style="margin:0 0 6px">1. Início de NPH no DM2 (antes de dormir)</h3>
+          <div class="campos">${campo("peso", "Peso (kg)", "ex.: 80")}</div>
+          <div class="resultado" data-saida="inicio">Informe o peso.</div>
+
+          <h3 style="margin:16px 0 6px">2. Dividir a NPH em duas doses</h3>
+          <div class="campos">${campo("noturna", "Dose noturna atual de NPH (UI)", "ex.: 30")}</div>
+          <div class="resultado" data-saida="divisao">Informe a dose noturna.</div>
+
+          <h3 style="margin:16px 0 6px">3. Trocar NPH por glargina</h3>
+          <div class="campos">
+            ${campo("nphTotal", "Dose total diária de NPH (UI)", "ex.: 40")}
+            <div class="campo"><label for="${id}-vezes">NPH aplicada</label><select id="${id}-vezes" data-k="vezes"><option value="1">1 vez ao dia</option><option value="2">2 ou mais vezes ao dia</option></select></div>
+          </div>
+          <div class="resultado" data-saida="glargina">Informe a dose de NPH.</div>
+
+          <h3 style="margin:16px 0 6px">4. Fator de correção (quem usa bolus)</h3>
+          <div class="campos">
+            ${campo("dtdi", "Dose total diária de insulina (UI) — opcional", "ex.: 60")}
+            ${campo("glic", "Glicemia antes da refeição (mg/dL)", "ex.: 250")}
+            ${campo("alvo", "Valor máximo do objetivo (mg/dL)", "ex.: 130")}
+          </div>
+          <div class="resultado" data-saida="fc">Informe a glicemia e o objetivo.</div>
+          <p class="nota">Fontes: PCDT do DM2 (2026) e Nota Técnica Conjunta nº 169/2026, conforme os cadernos do Ministério da Saúde/CONASEMS. Ferramenta de apoio: a prescrição, a titulação e o fator de correção são individualizados pelo prescritor, ensinados pela equipe e sempre acompanhados de plano para hipoglicemia.</p>
+        </div>
+      </section>`;
+  }
+
   const fmt = (n) => (Math.round(n * 10) / 10).toLocaleString("pt-BR");
 
   function ligarFerramentas(raiz) {
@@ -647,6 +711,69 @@
         out.innerHTML = `<span class="grande">GIF ${gif}</span> · escore OMP = ${omp}` + (gif === 2 ? "<br>Grau 2 no diagnóstico indica detecção tardia." : "");
       };
       el.addEventListener("change", upd); upd();
+    });
+
+    $$('[data-ferramenta="checklist"]', raiz).forEach((el) => {
+      const out = $("[data-saida]", el), cx = $$("input", el);
+      const upd = () => {
+        const n = cx.filter((c) => c.checked).length;
+        out.className = "resultado " + (n === cx.length ? "baixo" : n >= cx.length / 2 ? "medio" : "alto");
+        out.innerHTML = `<span class="grande">${n} de ${cx.length}</span> componentes organizados` + (n < cx.length ? "<br>Leve os itens desmarcados para a próxima reunião de equipe." : "<br>Fluxo organizado: mapear, pactuar, registrar, acompanhar e reavaliar.");
+      };
+      el.addEventListener("change", upd); upd();
+    });
+
+    $$('[data-ferramenta="hipo"]', raiz).forEach((el) => {
+      const peso = $("input", el), out = $("[data-saida]", el);
+      const upd = () => {
+        const p = parseFloat(String(peso.value).replace(",", "."));
+        if (!(p > 0)) { out.className = "resultado"; out.textContent = "Informe o peso."; return; }
+        const g = 0.3 * p;
+        out.className = "resultado";
+        out.innerHTML = `<span class="grande">${fmt(g)} g de carboidrato</span> de rápida absorção (${fmt(p)} kg × 0,3 g/kg)<br><small>Referência: 15 g ≈ 150 mL de refrigerante comum ou de suco de fruta ≈ 1 colher de sopa de açúcar ou de mel. ${fmt(g)} g ≈ ${fmt(g / 15 * 150)} mL de refrigerante comum ou suco.</small>`;
+      };
+      peso.addEventListener("input", upd); upd();
+    });
+
+    $$('[data-ferramenta="insulina"]', raiz).forEach((el) => {
+      const v = (k) => { const i = $(`[data-k="${k}"]`, el); return i ? parseFloat(String(i.value).replace(",", ".")) : NaN; };
+      const saida = (k) => $(`[data-saida="${k}"]`, el);
+      const r5 = (x) => Math.round(x);
+      const upd = () => {
+        const peso = v("peso"), o1 = saida("inicio");
+        if (peso > 0) {
+          o1.className = "resultado";
+          o1.innerHTML = `<span class="grande">10 UI ou ${r5(0.1 * peso)} a ${r5(0.2 * peso)} UI</span> de NPH antes de dormir (0,1–0,2 UI/kg)<br>` +
+            `Ajustar <b>+2 UI a cada 3 dias</b> até jejum de 80–130 mg/dL; jejum &lt; 70 ou hipoglicemia noturna → reduzir 2 a 4 UI.<br>` +
+            `<small>Limites: basal máxima ${r5(0.5 * peso)} UI/dia (0,5 UI/kg; ${r5(0.75 * peso)} UI só na obesidade com resistência importante). Dose total diária esperada no DM2: ${r5(0.5 * peso)}–${r5(1.0 * peso)} UI (50% basal / 50% bolus).</small>`;
+        } else { o1.className = "resultado"; o1.textContent = "Informe o peso."; }
+
+        const noturna = v("noturna"), o2 = saida("divisao");
+        if (noturna > 0) {
+          const tot = noturna * 0.8, manha = tot * 2 / 3, noite = tot / 3;
+          o2.className = "resultado";
+          o2.innerHTML = `80% de ${fmt(noturna)} UI = <b>${fmt(tot)} UI</b><br><span class="grande">${r5(manha)} UI de manhã + ${r5(noite)} UI antes de dormir</span> (2/3 e 1/3)<br><small>Ajustar a dose da manhã +1 a 3 UI a cada 3 dias até glicemia antes do jantar de 80–130 mg/dL.</small>`;
+        } else { o2.className = "resultado"; o2.textContent = "Informe a dose noturna."; }
+
+        const nph = v("nphTotal"), vezes = ($(`[data-k="vezes"]`, el) || {}).value, o3 = saida("glargina");
+        if (nph > 0) {
+          const dose = vezes === "1" ? nph : nph * 0.8;
+          o3.className = "resultado";
+          o3.innerHTML = `<span class="grande">Glargina ${r5(dose)} UI, 1 vez ao dia</span>` +
+            (vezes === "1" ? " (conversão 1:1)" : ` (${fmt(nph)} UI − 20%; de preferência no horário da maior dose anterior de NPH)`) +
+            `<br><small>Ajustar pela glicemia de jejum, com titulação em intervalos de até 3 dias. Manter a insulina prandial (regular), se em uso.</small>`;
+        } else { o3.className = "resultado"; o3.textContent = "Informe a dose de NPH."; }
+
+        const dtdi = v("dtdi"), glic = v("glic"), alvo = v("alvo"), o4 = saida("fc");
+        const fc = dtdi > 0 ? 1800 / dtdi : 50;
+        if (glic > 0 && alvo > 0) {
+          const ui = glic > alvo ? (glic - alvo) / fc : 0;
+          o4.className = "resultado" + (ui > 0 ? "" : " baixo");
+          o4.innerHTML = `Fator de correção: <b>${fmt(fc)} mg/dL por UI</b> ${dtdi > 0 ? `(1.800 ÷ ${fmt(dtdi)})` : "(FC inicial = 50)"}<br>` +
+            (ui > 0 ? `<span class="grande">${fmt(ui)} UI</span> de correção (${fmt(glic)} − ${fmt(alvo)} = ${fmt(glic - alvo)} mg/dL ÷ ${fmt(fc)}), somadas à dose prandial prescrita` : "Glicemia dentro do objetivo: sem dose de correção.");
+        } else { o4.className = "resultado"; o4.innerHTML = `Fator de correção: <b>${fmt(fc)} mg/dL por UI</b>. Informe a glicemia e o objetivo.`; }
+      };
+      el.addEventListener("input", upd); el.addEventListener("change", upd); upd();
     });
 
     $$("[data-filtro]", raiz).forEach((inp) => {

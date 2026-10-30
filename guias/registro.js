@@ -62,5 +62,31 @@ self.GUIAS = [
       { rotulo: "Contatos e BCG", topico: "contatos" },
       { rotulo: "Grau de incapacidade", topico: "calc-gif" }
     ]
+  },
+  {
+    id: "insulinoterapia",
+    sigla: "INS",
+    titulo: "Insulinoterapia na APS",
+    subtitulo: "Diabetes mellitus, insulinas no SUS, organização do cuidado e dispositivos",
+    fonte: "Ministério da Saúde · CONASEMS (2026)",
+    cor: "#d9622b",
+    arquivos: [
+      "guias/insulinoterapia/topicos-1.js",
+      "guias/insulinoterapia/topicos-2.js",
+      "guias/insulinoterapia/topicos-3.js"
+    ],
+    grupos: [
+      { id: "diabetes", sigla: "DM", eyebrow: "Diagnóstico, metas e tratamento", nome: "Diabetes mellitus" },
+      { id: "insulinas", sigla: "IN", eyebrow: "Tipos, apresentações e acesso", nome: "Insulinas no SUS" },
+      { id: "aps", sigla: "AP", eyebrow: "Organização do cuidado", nome: "Insulinoterapia na APS" },
+      { id: "dispositivos", sigla: "DI", eyebrow: "Hipoglicemia, canetas, conservação e descarte", nome: "Uso seguro e dispositivos" },
+      { id: "utilitarios", sigla: "UC", eyebrow: "Apoio à decisão", nome: "Utilitários clínicos" }
+    ],
+    atalhos: [
+      { rotulo: "Hipoglicemia", topico: "hipoglicemia" },
+      { rotulo: "Início de NPH", topico: "insulina-dm2" },
+      { rotulo: "NPH → glargina", topico: "transicao-glargina" },
+      { rotulo: "Metas", topico: "metas-glicemicas" }
+    ]
   }
 ];
