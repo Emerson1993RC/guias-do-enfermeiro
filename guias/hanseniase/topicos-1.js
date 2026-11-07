@@ -89,6 +89,7 @@
     { t: "box", v: "info", titulo: "Escore OMP (olhos, mãos e pés)", html:
       "<p>Soma do grau de incapacidade de cada olho, mão e pé. Exemplo do PCDT: mãos 0 e 0, pé direito 1, pé esquerdo 2, olho direito 0, olho esquerdo 2 → <b>OMP = 5</b>. O GIF do paciente é o <b>maior grau</b> encontrado.</p>" +
       "<p>Use a <a href=\"#/hanseniase/calc-gif\"><b>calculadora de GIF e OMP</b></a>.</p>" },
+    { t: "fichas", titulo: "Formulário da ANS para baixar", guia: "hanseniase", so: ["formulario-avaliacao-neurologica-simplificada.pdf"] },
     { t: "box", v: "alerta", titulo: "Atenção", html: "<p>GIF 2 no diagnóstico indica <b>detecção tardia</b>. Corticosteroides podem ter efeito analgésico, mas <b>não protegem do dano neurológico</b> — por isso a ANS periódica é essencial, inclusive para detectar a neurite silenciosa.</p>" }
   ]
 },

@@ -45,6 +45,11 @@ self.GUIAS = [
     fonte: "Ministério da Saúde · Portaria SCTIE/MS nº 67/2022",
     pdf: "guias/hanseniase/pcdt-hanseniase-2022.pdf",
     cor: "#7b3fa0",
+    notificacao: "Doença de notificação compulsória (Sinan)",
+    fichas: [
+      { titulo: "Avaliação Neurológica Simplificada (ANS) e grau de incapacidade física", desc: "Formulário do Ministério da Saúde para o diagnóstico, a cada 3 meses e na alta.", arquivo: "guias/hanseniase/fichas/formulario-avaliacao-neurologica-simplificada.pdf", tipo: "PDF", tamanho: "590 KB", origem: "Ministério da Saúde" },
+      { titulo: "Solicitação de baciloscopia (hanseníase)", desc: "Pedido do exame com diagrama corporal e campo de resultado (IB).", arquivo: "guias/hanseniase/fichas/solicitacao-baciloscopia-sobral.pdf", tipo: "PDF", tamanho: "165 KB", origem: "Prefeitura de Sobral · CRIS" }
+    ],
     arquivos: [
       "guias/hanseniase/topicos-1.js",
       "guias/hanseniase/topicos-2.js"
@@ -90,6 +95,32 @@ self.GUIAS = [
       { rotulo: "NPH → glargina", topico: "transicao-glargina" },
       { rotulo: "Técnica com caneta", topico: "caneta-passo-a-passo" },
       { rotulo: "Metas", topico: "metas-glicemicas" }
+    ]
+  },
+  {
+    id: "mpox",
+    sigla: "MPX",
+    titulo: "Mpox",
+    subtitulo: "Notificação, investigação e coleta de amostras",
+    fonte: "Ministério da Saúde (e-SUS Sinan) · SESA-CE · LACEN",
+    cor: "#c0392b",
+    notificacao: "Doença de notificação compulsória (e-SUS Sinan)",
+    arquivos: ["guias/mpox/topicos-1.js"],
+    fichas: [
+      { titulo: "Ficha Individual de Notificação — e-SUS Sinan", desc: "Primeira ficha a preencher: dados da notificação, identificação, agravo (CID), sinais e sintomas e início dos sintomas. Versão 01/03/2023.", arquivo: "guias/mpox/fichas/ficha-notificacao-esus-sinan.pdf", tipo: "PDF", tamanho: "2,1 MB", origem: "Ministério da Saúde" },
+      { titulo: "Ficha de Investigação de Mpox — e-SUS Sinan (V003)", desc: "Hospitalização, laboratório, diagnósticos diferenciais, exposição de 21 dias e classificação final. Versão 25/06/2025.", arquivo: "guias/mpox/fichas/ficha-investigacao-mpox-v003-2025.pdf", tipo: "PDF", tamanho: "1,5 MB", origem: "Ministério da Saúde" },
+      { titulo: "Ficha de Investigação Complementar de Mpox", desc: "Percurso assistencial, isolamento, exposições, parceiros e contatos dos últimos 21 dias. Editável no Word.", arquivo: "guias/mpox/fichas/ficha-investigacao-complementar-mpox-sesa-ce.docx", tipo: "Word", tamanho: "1,0 MB", origem: "Secretaria da Saúde do Ceará" },
+      { titulo: "Formulário para Diagnóstico de Mpox Ampliado (FOR.545.011)", desc: "Requisição ao LACEN para Orthopoxvírus, Mpox e Varicela zoster, com critérios de inclusão.", arquivo: "guias/mpox/fichas/formulario-diagnostico-mpox-ampliado-lacen.pdf", tipo: "PDF", tamanho: "88 KB", origem: "LACEN" }
+    ],
+    grupos: [
+      { id: "notificacao", sigla: "NT", eyebrow: "Fichas e passo a passo", nome: "Notificação" },
+      { id: "laboratorio", sigla: "LB", eyebrow: "Amostras, LACEN e diferenciais", nome: "Coleta e laboratório" },
+      { id: "investigacao", sigla: "IV", eyebrow: "Contatos e encerramento", nome: "Investigação" }
+    ],
+    atalhos: [
+      { rotulo: "Como notificar", topico: "como-notificar" },
+      { rotulo: "Coleta e LACEN", topico: "coleta-laboratorio" },
+      { rotulo: "Contatos (21 dias)", topico: "investigacao-contatos" }
     ]
   }
 ];

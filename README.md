@@ -18,6 +18,13 @@ Segundo documento incluído:
 Terceiro documento incluído:
 **Insulinoterapia na APS** (Ministério da Saúde · CONASEMS, 2026) — 34 tópicos em 6 grupos (diabetes mellitus, insulinas no SUS, organização do cuidado na APS, uso seguro e dispositivos, preparo e técnica de aplicação, utilitários), com calculadoras de NPH/glargina/fator de correção, carboidrato na hipoglicemia infantil e checklist da equipe. Novos temas entram em `guias/insulinoterapia/topicos-N.js` conforme forem liberados.
 
+Quarto documento incluído:
+**Mpox — notificação, investigação e coleta** (fichas e-SUS Sinan do Ministério da Saúde, ficha complementar da SESA-CE e formulário do LACEN) — 7 tópicos.
+
+## Fichas para baixar
+
+Guias de agravos de notificação compulsória podem listar `fichas` em `guias/registro.js` (`titulo`, `desc`, `arquivo`, `tipo`, `tamanho`, `origem`) e o campo `notificacao`. Elas aparecem no card da biblioteca (selo “Notificação compulsória”), na página do guia, na página `#/fichas` e em qualquer tópico com a seção `{ t: "fichas", guia: "<id>" }`. O service worker coloca as fichas no cache para baixar offline.
+
 > Ferramenta de apoio. O conteúdo foi transcrito do PDF oficial; confirme sempre a conduta conforme o quadro do paciente e as diretrizes vigentes.
 
 ## Pergunte aos guias (offline)

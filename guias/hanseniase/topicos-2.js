@@ -173,6 +173,7 @@
   id: "notificacao", num: "20", titulo: "Notificação e indicadores", grupo: "seguimento", pag: 107,
   resumo: "Doença de notificação compulsória no Sinan. Indicadores de detecção, GIF 2, cura, abandono e contatos examinados.",
   secoes: [
+    { t: "fichas", titulo: "Fichas e formulários para baixar", guia: "hanseniase" },
     { t: "box", v: "diag", titulo: "Notificação", html: "<p>A hanseníase é de <b>notificação compulsória</b> no Sinan. A APS deve ser a principal instância de atendimento, com referência e contrarreferência quando aplicáveis. Este PCDT substitui as orientações anteriores do Ministério da Saúde, que devem ser consideradas desatualizadas.</p>" },
     { t: "lista", titulo: "Indicadores de avaliação da qualidade dos serviços", itens: [
       "Proporção de cura entre os casos novos das coortes;",

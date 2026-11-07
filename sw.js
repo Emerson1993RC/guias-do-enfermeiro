@@ -1,6 +1,6 @@
 /* Service worker: deixa o app 100% offline.
    Ao alterar qualquer conteúdo, suba VERSAO para os aparelhos baixarem a atualização. */
-const VERSAO = "1.6.0";
+const VERSAO = "1.7.0";
 const CACHE = "guias-aps-" + VERSAO;
 
 importScripts("guias/registro.js");
@@ -18,7 +18,8 @@ const BASE = [
   "icons/icon-maskable-512.png"
 ];
 // O PDF original (grande) não entra no pré-cache: fica salvo na primeira vez que for aberto.
-const ARQUIVOS = BASE.concat(...(self.GUIAS || []).map((g) => g.arquivos));
+// As fichas de notificação/formulários entram no cache para baixar e imprimir mesmo sem internet.
+const ARQUIVOS = BASE.concat(...(self.GUIAS || []).map((g) => g.arquivos.concat((g.fichas || []).map((f) => f.arquivo))));
 
 // cache: "reload" ignora o cache HTTP do navegador, para não guardar arquivos da versão anterior.
 self.addEventListener("install", (e) => {

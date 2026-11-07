@@ -352,3 +352,21 @@ mark.destaque { background: #ffe58a; color: #1a1300; border-radius: 3px; }
   .chat-painel { right: 8px; left: 8px; width: auto; bottom: calc(80px + env(safe-area-inset-bottom)); height: min(70vh, calc(100vh - 110px)); }
 }
 @media print { .chat-bolinha, .chat-painel { display: none !important; } }
+
+/* Fichas para baixar */
+.fichas { display: grid; gap: 10px; }
+.ficha { display: grid; grid-template-columns: auto 1fr auto; gap: 12px; align-items: center; padding: 12px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface-2); }
+.ficha-ico { width: 44px; height: 52px; border-radius: 8px; display: grid; place-items: center; font: 800 12px var(--font); color: #fff; background: #c0392b; letter-spacing: .04em; }
+.ficha-ico.word { background: #2b579a; }
+.ficha-txt strong { display: block; font-size: 15px; }
+.ficha-txt small { display: block; color: var(--ink-2); margin-top: 2px; line-height: 1.4; }
+.ficha-acoes { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+.selo-notif { align-self: flex-start; font-size: 11.5px; font-weight: 700; color: #b03a2e; background: rgba(192, 57, 43, .1); border: 1px solid rgba(192, 57, 43, .3); padding: 3px 9px; border-radius: 999px; }
+@media (max-width: 640px) {
+  .ficha { grid-template-columns: auto 1fr; }
+  .ficha-acoes { grid-column: 1 / -1; justify-content: stretch; }
+  .ficha-acoes .btn { flex: 1; justify-content: center; }
+}
+
+/* espaço para a bolinha flutuante não cobrir o fim da página */
+body { padding-bottom: 84px; }

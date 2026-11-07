@@ -46,6 +46,7 @@
   function render() {
     const { guiaId, topicoId, q, params } = rotaAtual();
     if (guiaId === "perguntar") { montarTopo(null, "Pergunte aos guias"); return renderPerguntar(params); }
+    if (guiaId === "fichas") { montarTopo(null, "Fichas para baixar"); return renderPaginaFichas(); }
     const g = guiaId && guia(guiaId);
     montarTopo(g);
     if (!g) return renderBiblioteca();
@@ -72,7 +73,7 @@
           <p class="eyebrow">Biblioteca</p>
           <h1>Guia + Enfermagem</h1>
           <p><b>Protocolos para seguir à risca.</b> Consulta rápida de condutas e posologias — funciona <b>sem internet</b> depois do primeiro acesso. Instale no celular para abrir como um aplicativo.</p>
-          <div class="acoes-hero"><a class="btn primario" href="#/perguntar">Pergunte aos guias</a><button class="btn" data-abrir-busca>Pesquisar em todos os guias</button></div>
+          <div class="acoes-hero"><a class="btn primario" href="#/perguntar">Pergunte aos guias</a><a class="btn" href="#/fichas">Fichas para baixar</a><button class="btn" data-abrir-busca>Pesquisar em todos os guias</button></div>
         </div>
         <aside class="como-usar">
           <strong>Como usar na rotina</strong>
@@ -86,7 +87,8 @@
             <p class="eyebrow">${esc(g.fonte)}</p>
             <h2>${esc(g.titulo)}</h2>
             <p class="muted" style="margin:0">${esc(g.subtitulo)}</p>
-            <span class="contador" style="align-self:flex-start">${topicosDe(g).length} tópicos</span>
+            <span class="contador" style="align-self:flex-start">${topicosDe(g).length} tópicos${g.fichas && g.fichas.length ? ` · ${g.fichas.length} fichas` : ""}</span>
+            ${g.notificacao ? `<span class="selo-notif">Notificação compulsória</span>` : ""}
           </a>`).join("")}
         <div class="card guia-card em-breve">
           <span class="sigla-g" style="background:var(--ink-3)">+</span>
@@ -133,13 +135,15 @@
                 <a class="btn primario" href="#/perguntar?g=${g.id}">Pergunte ao guia</a>
                 <button class="btn" data-abrir-busca>Pesquisar no guia</button>
                 ${g.pdf ? `<a class="btn" href="${g.pdf}" target="_blank" rel="noopener">Abrir PDF original</a>` : ""}
+                ${g.fichas && g.fichas.length ? `<a class="btn" href="#/${g.id}" data-ir-fichas>Fichas para baixar</a>` : ""}
               </div>
             </div>
             <aside class="como-usar">
               <strong>Como usar na rotina</strong>
-              <ol><li>Busca rápida por diagnóstico, conduta, medicamento ou tópico.</li><li>Navegação por grupos clínicos.</li><li>Calculadoras de apoio em Utilitários clínicos.</li></ol>
+              <ol><li>Busca rápida por diagnóstico, conduta, medicamento ou tópico.</li><li>Navegação por grupos clínicos.</li><li>${g.grupos.some((x) => x.id === "utilitarios") ? "Calculadoras de apoio em Utilitários clínicos." : g.fichas ? "Fichas de notificação e formulários para baixar." : "Fonte e página indicadas em cada tópico."}</li></ol>
             </aside>
           </section>
+          ${blocoFichasGuia(g)}
           ${g.grupos.map((gr) => {
             const ts = tops.filter((t) => t.grupo === gr.id);
             if (!ts.length) return "";
@@ -158,6 +162,7 @@
           }).join("")}
         </div>
       </div>`;
+    $$("[data-ir-fichas]", app).forEach((a) => a.addEventListener("click", (e) => { e.preventDefault(); const f = $("#fichas"); if (f) f.scrollIntoView({ behavior: "smooth", block: "start" }); }));
     $$("[data-grupo]", app).forEach((a) => a.addEventListener("click", (e) => {
       e.preventDefault();
       const alvo = $("#grupo-" + a.dataset.grupo);
@@ -234,6 +239,7 @@
       case "checklist": return renderChecklist(s, id);
       case "hipo": return renderHipo(s, id);
       case "insulina": return renderInsulina(s, id);
+      case "fichas": return renderFichasSecao(s, id);
       default: return "";
     }
   }
@@ -496,6 +502,59 @@
           <p class="nota">GIF do paciente = maior grau encontrado. OMP = soma dos graus dos dois olhos, das duas mãos e dos dois pés (0 a 12). Critérios de cada grau: ver <a href="#/hanseniase/ans-gif">ANS e grau de incapacidade</a>. Graus 1 e 2 só são atribuídos à hanseníase quando excluídas outras causas.</p>
         </div>
       </section>`;
+  }
+
+  /* ---------- fichas de notificação e formulários para baixar ---------- */
+  const nomeArquivo = (f) => f.arquivo.split("/").pop();
+  function cartaoFicha(f, g) {
+    return `
+      <div class="ficha">
+        <span class="ficha-ico ${f.tipo === "Word" ? "word" : ""}" aria-hidden="true">${f.tipo === "Word" ? "DOC" : "PDF"}</span>
+        <div class="ficha-txt">
+          <strong>${esc(f.titulo)}</strong>
+          <small>${esc(f.desc || "")}</small>
+          <small class="muted">${esc(f.origem || "")}${f.tamanho ? " · " + esc(f.tipo) + ", " + esc(f.tamanho) : ""}${g ? " · " + esc(g.titulo) : ""}</small>
+        </div>
+        <div class="ficha-acoes">
+          <a class="btn primario" href="${f.arquivo}" download="${nomeArquivo(f)}">Baixar</a>
+          ${f.tipo === "PDF" ? `<a class="btn" href="${f.arquivo}" target="_blank" rel="noopener">Abrir</a>` : ""}
+        </div>
+      </div>`;
+  }
+  function renderFichasSecao(s, id) {
+    const g = guia(s.guia);
+    const lista = ((g && g.fichas) || []).filter((f) => !s.so || s.so.includes(nomeArquivo(f)));
+    if (!lista.length) return "";
+    return `
+      <section class="card bloco" id="${id}">
+        <h2>${s.titulo}</h2>
+        <div class="fichas">${lista.map((f) => cartaoFicha(f)).join("")}</div>
+        <p class="nota">Ficam salvas no celular para uso offline. No celular: “Baixar” guarda o arquivo; “Abrir” mostra o PDF para imprimir ou compartilhar.</p>
+      </section>`;
+  }
+  function blocoFichasGuia(g) {
+    if (!g.fichas || !g.fichas.length) return "";
+    return `
+      <section class="card bloco fichas-guia" id="fichas">
+        <div class="secao-grupo-cab" style="margin:0 0 8px"><div><p class="eyebrow">${esc(g.notificacao || "Formulários")}</p><h2 style="margin:0">Fichas e formulários para baixar</h2></div><span class="contador">${g.fichas.length} ${g.fichas.length > 1 ? "arquivos" : "arquivo"}</span></div>
+        <div class="fichas">${g.fichas.map((f) => cartaoFicha(f)).join("")}</div>
+      </section>`;
+  }
+  function renderPaginaFichas() {
+    const com = GUIAS.filter((g) => g.fichas && g.fichas.length);
+    app.innerHTML = `
+      <section class="card hero" style="grid-template-columns:1fr">
+        <div>
+          <p class="eyebrow">Notificação e formulários</p>
+          <h1>Fichas para baixar</h1>
+          <p>Fichas de notificação, investigação e formulários dos guias, prontas para imprimir ou preencher. Ficam disponíveis <b>sem internet</b> depois do primeiro acesso.</p>
+        </div>
+      </section>
+      ${com.map((g) => `
+        <section class="secao-grupo">
+          <div class="secao-grupo-cab"><div><p class="eyebrow">${esc(g.notificacao || "Formulários")}</p><h2><a href="#/${g.id}" style="color:inherit;text-decoration:none">${esc(g.titulo)}</a></h2></div><span class="contador">${g.fichas.length} ${g.fichas.length > 1 ? "arquivos" : "arquivo"}</span></div>
+          <div class="card bloco"><div class="fichas">${g.fichas.map((f) => cartaoFicha(f)).join("")}</div></div>
+        </section>`).join("")}`;
   }
 
   /* ---------- ferramentas do guia de insulinoterapia ---------- */
