@@ -521,6 +521,18 @@
         </div>
       </div>`;
   }
+  function blocoLinks(links, titulo = "Se o arquivo não abrir, acesse direto na fonte oficial") {
+    if (!links || !links.length) return "";
+    return `
+      <div class="links-oficiais">
+        <p class="eyebrow" style="margin:0 0 6px">${esc(titulo)}</p>
+        ${links.map((l) => `
+          <a class="link-oficial" href="${l.url}" target="_blank" rel="noopener">
+            <span aria-hidden="true">↗</span>
+            <span><strong>${esc(l.titulo)}</strong>${l.desc ? `<small>${esc(l.desc)}</small>` : ""}<small class="muted">${esc(new URL(l.url).hostname)} · precisa de internet</small></span>
+          </a>`).join("")}
+      </div>`;
+  }
   function renderFichasSecao(s, id) {
     const g = guia(s.guia);
     const lista = ((g && g.fichas) || []).filter((f) => !s.so || s.so.includes(nomeArquivo(f)));
@@ -530,6 +542,7 @@
         <h2>${s.titulo}</h2>
         <div class="fichas">${lista.map((f) => cartaoFicha(f)).join("")}</div>
         <p class="nota">Ficam salvas no celular para uso offline. No celular: “Baixar” guarda o arquivo; “Abrir” mostra o PDF para imprimir ou compartilhar.</p>
+        ${s.so ? "" : blocoLinks(g.links)}
       </section>`;
   }
   function blocoFichasGuia(g) {
@@ -538,6 +551,7 @@
       <section class="card bloco fichas-guia" id="fichas">
         <div class="secao-grupo-cab" style="margin:0 0 8px"><div><p class="eyebrow">${esc(g.notificacao || "Formulários")}</p><h2 style="margin:0">Fichas e formulários para baixar</h2></div><span class="contador">${g.fichas.length} ${g.fichas.length > 1 ? "arquivos" : "arquivo"}</span></div>
         <div class="fichas">${g.fichas.map((f) => cartaoFicha(f)).join("")}</div>
+        ${blocoLinks(g.links)}
       </section>`;
   }
   function renderPaginaFichas() {
@@ -547,13 +561,14 @@
         <div>
           <p class="eyebrow">Notificação e formulários</p>
           <h1>Fichas para baixar</h1>
-          <p>Fichas de notificação, investigação e formulários dos guias, prontas para imprimir ou preencher. Ficam disponíveis <b>sem internet</b> depois do primeiro acesso.</p>
+          <p>Fichas de notificação, investigação e formulários dos guias, prontas para imprimir ou preencher. Ficam disponíveis <b>sem internet</b> depois do primeiro acesso. Abaixo de cada guia há links para as fontes oficiais, caso algum arquivo não abra.</p>
+          ${blocoLinks([{ titulo: "Portal Sinan — fichas de todas as doenças e agravos", desc: "Fichas oficiais de notificação/investigação do Sinan e instruções de preenchimento.", url: "https://portalsinan.saude.gov.br/doencas-e-agravos" }, { titulo: "e-SUS Sinan — notificar on-line", desc: "Sistema oficial do Ministério da Saúde (login gov.br).", url: "https://esussinan.saude.gov.br/login" }], "Fontes oficiais gerais")}
         </div>
       </section>
       ${com.map((g) => `
         <section class="secao-grupo">
           <div class="secao-grupo-cab"><div><p class="eyebrow">${esc(g.notificacao || "Formulários")}</p><h2><a href="#/${g.id}" style="color:inherit;text-decoration:none">${esc(g.titulo)}</a></h2></div><span class="contador">${g.fichas.length} ${g.fichas.length > 1 ? "arquivos" : "arquivo"}</span></div>
-          <div class="card bloco"><div class="fichas">${g.fichas.map((f) => cartaoFicha(f)).join("")}</div></div>
+          <div class="card bloco"><div class="fichas">${g.fichas.map((f) => cartaoFicha(f)).join("")}</div>${blocoLinks(g.links)}</div>
         </section>`).join("")}`;
   }
 

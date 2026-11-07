@@ -50,6 +50,9 @@ self.GUIAS = [
       { titulo: "Avaliação Neurológica Simplificada (ANS) e grau de incapacidade física", desc: "Formulário do Ministério da Saúde para o diagnóstico, a cada 3 meses e na alta.", arquivo: "guias/hanseniase/fichas/formulario-avaliacao-neurologica-simplificada.pdf", tipo: "PDF", tamanho: "590 KB", origem: "Ministério da Saúde" },
       { titulo: "Solicitação de baciloscopia (hanseníase)", desc: "Pedido do exame com diagrama corporal e campo de resultado (IB).", arquivo: "guias/hanseniase/fichas/solicitacao-baciloscopia-sobral.pdf", tipo: "PDF", tamanho: "165 KB", origem: "Prefeitura de Sobral · CRIS" }
     ],
+    links: [
+      { titulo: "Portal Sinan — fichas por doença e agravo", desc: "Ficha de notificação/investigação da hanseníase e instruções de preenchimento.", url: "https://portalsinan.saude.gov.br/doencas-e-agravos" }
+    ],
     arquivos: [
       "guias/hanseniase/topicos-1.js",
       "guias/hanseniase/topicos-2.js"
@@ -111,6 +114,12 @@ self.GUIAS = [
       { titulo: "Ficha de Investigação de Mpox — e-SUS Sinan (V003)", desc: "Hospitalização, laboratório, diagnósticos diferenciais, exposição de 21 dias e classificação final. Versão 25/06/2025.", arquivo: "guias/mpox/fichas/ficha-investigacao-mpox-v003-2025.pdf", tipo: "PDF", tamanho: "1,5 MB", origem: "Ministério da Saúde" },
       { titulo: "Ficha de Investigação Complementar de Mpox", desc: "Percurso assistencial, isolamento, exposições, parceiros e contatos dos últimos 21 dias. Editável no Word.", arquivo: "guias/mpox/fichas/ficha-investigacao-complementar-mpox-sesa-ce.docx", tipo: "Word", tamanho: "1,0 MB", origem: "Secretaria da Saúde do Ceará" },
       { titulo: "Formulário para Diagnóstico de Mpox Ampliado (FOR.545.011)", desc: "Requisição ao LACEN para Orthopoxvírus, Mpox e Varicela zoster, com critérios de inclusão.", arquivo: "guias/mpox/fichas/formulario-diagnostico-mpox-ampliado-lacen.pdf", tipo: "PDF", tamanho: "88 KB", origem: "LACEN" }
+    ],
+    links: [
+      { titulo: "Saúde Ceará — nova nota técnica sobre Mpox (06/11/2026)", desc: "Notícia da Secretaria da Saúde do Ceará com as orientações de prevenção e a nota técnica.", url: "https://www.ce.gov.br/saude/2026/11/06/saude-ceara-reforca-orientacoes-para-prevencao-da-mpox-em-nova-nota-tecnica/" },
+      { titulo: "e-SUS Sinan — notificar on-line", desc: "Sistema oficial para registrar a notificação e a investigação (login gov.br).", url: "https://esussinan.saude.gov.br/login" },
+      { titulo: "Manual de instruções do e-SUS Sinan", desc: "Ministério da Saúde: como preencher a notificação e a ficha de investigação.", url: "https://www.gov.br/saude/pt-br/centrais-de-conteudo/publicacoes/svsa/vigilancia/e-sus-sinan-manual-de-instrucoes" },
+      { titulo: "Ministério da Saúde — Mpox", desc: "Notícias, notas e atualizações oficiais sobre Mpox.", url: "https://www.gov.br/saude/pt-br/assuntos/noticias/mpox" }
     ],
     grupos: [
       { id: "notificacao", sigla: "NT", eyebrow: "Fichas e passo a passo", nome: "Notificação" },

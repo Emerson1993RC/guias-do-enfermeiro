@@ -370,3 +370,10 @@ mark.destaque { background: #ffe58a; color: #1a1300; border-radius: 3px; }
 
 /* espaço para a bolinha flutuante não cobrir o fim da página */
 body { padding-bottom: 84px; }
+
+/* Links oficiais (alternativa às fichas) */
+.links-oficiais { margin-top: 14px; display: grid; gap: 8px; }
+.link-oficial { display: flex; gap: 10px; align-items: flex-start; padding: 10px 12px; border-radius: 12px; border: 1px dashed var(--line); text-decoration: none; color: var(--ink); background: var(--surface); }
+.link-oficial > span:first-child { font-weight: 800; color: var(--accent); }
+.link-oficial strong { display: block; font-size: 14.5px; }
+.link-oficial small { display: block; color: var(--ink-2); font-size: 12.5px; margin-top: 2px; overflow-wrap: anywhere; }
