@@ -42,6 +42,25 @@
     <p id="rodape-versao"></p>
   </footer>
 
+  <!-- Pergunte aos guias: bolinha flutuante -->
+  <button id="chat-bolinha" class="chat-bolinha" type="button" aria-label="Pergunte aos guias" aria-expanded="false" aria-controls="chat-painel">
+    <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3h11A2.5 2.5 0 0 1 20 5.5v8a2.5 2.5 0 0 1-2.5 2.5H10l-4.2 3.6c-.5.4-1.3.1-1.3-.6V16.9A2.5 2.5 0 0 1 4 14.5z" fill="currentColor"/><circle cx="8.5" cy="9.5" r="1.2" fill="var(--accent)"/><circle cx="12" cy="9.5" r="1.2" fill="var(--accent)"/><circle cx="15.5" cy="9.5" r="1.2" fill="var(--accent)"/></svg>
+  </button>
+  <section id="chat-painel" class="chat-painel" hidden role="dialog" aria-label="Pergunte aos guias">
+    <header class="chat-cab">
+      <div><strong>Pergunte aos guias</strong><small>Respostas com o texto dos guias · funciona offline</small></div>
+      <button type="button" class="chat-fechar" data-chat-fechar aria-label="Fechar">✕</button>
+    </header>
+    <div class="chat-corpo" id="chat-corpo"></div>
+    <form class="chat-form" id="chat-form">
+      <select name="g" aria-label="Onde procurar"></select>
+      <div class="chat-linha">
+        <textarea name="p" rows="1" placeholder="Digite sua dúvida…" aria-label="Sua pergunta"></textarea>
+        <button class="chat-enviar" type="submit" aria-label="Perguntar">➤</button>
+      </div>
+    </form>
+  </section>
+
   <div id="busca" class="busca" hidden role="dialog" aria-modal="true" aria-label="Pesquisar nos guias">
     <div class="busca-caixa">
       <div class="busca-campo">

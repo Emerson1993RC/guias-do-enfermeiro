@@ -911,6 +911,51 @@
     if (!pergunta) setTimeout(() => form.p.focus(), 30);
   }
 
+  /* ---------- bolinha flutuante do "Pergunte aos guias" ---------- */
+  const bolinha = $("#chat-bolinha"), painel = $("#chat-painel"), chatCorpo = $("#chat-corpo"), chatForm = $("#chat-form");
+  const EXEMPLOS_CHAT = ["Como tratar hipoglicemia nível 2?", "Dose inicial de NPH no DM2", "Quais contatos recebem BCG?", "Onde aplicar insulina na gestante?"];
+  let chatIniciado = false;
+  function chatBoasVindas() {
+    chatCorpo.innerHTML = `<div class="msg bot">Olá! Escreva sua dúvida e eu mostro <b>os trechos dos guias</b> que respondem, com tópico e página.<div class="exemplos">${EXEMPLOS_CHAT.map((x) => `<button class="chip-ex" type="button" data-chat-ex="${esc(x)}">${esc(x)}</button>`).join("")}</div></div>`;
+  }
+  function abrirChat() {
+    const { guiaId } = rotaAtual();
+    chatForm.g.innerHTML = `<option value="">Todos os guias</option>` + GUIAS.map((g) => `<option value="${g.id}">${esc(g.titulo)}</option>`).join("");
+    if (!chatIniciado) { chatBoasVindas(); chatIniciado = true; chatForm.g.value = guia(guiaId) ? guiaId : ""; }
+    painel.hidden = false; bolinha.setAttribute("aria-expanded", "true"); bolinha.classList.add("aberta");
+    setTimeout(() => chatForm.p.focus(), 30);
+  }
+  function fecharChat() { painel.hidden = true; bolinha.setAttribute("aria-expanded", "false"); bolinha.classList.remove("aberta"); }
+  function perguntarNoChat(p) {
+    const gid = chatForm.g.value;
+    const { termos, res } = responder(p, gid);
+    const q = encodeURIComponent(termos.join(" "));
+    const resposta = res.length
+      ? `<div class="msg bot"><small class="muted">Encontrei ${res.length > 3 ? "estes trechos" : res.length === 1 ? "este trecho" : "estes trechos"}${gid ? " neste guia" : ""}:</small>
+          ${res.slice(0, 4).map((c) => `
+            <a class="chat-res" href="#/${c.g.id}/${c.t.id}?q=${q}" style="--cor:${c.g.cor || "var(--accent)"}">
+              <span class="onde">${esc(c.g.sigla)} · ${esc(c.t.titulo)}</span>
+              <span class="txt">${frasesRelevantes(c, termos)}</span>
+              <small class="muted">pág. ${c.t.pag} · abrir tópico ›</small>
+            </a>`).join("")}
+          <a class="chat-mais" href="#/perguntar?${new URLSearchParams({ ...(gid ? { g: gid } : {}), p }).toString()}">Ver todos os resultados</a></div>`
+      : `<div class="msg bot">Não encontrei esse assunto${gid ? " neste guia" : " nos guias"}. Tente outras palavras, como o nome do medicamento ou da condição${gid ? ", ou escolha “Todos os guias”" : ""}.</div>`;
+    chatCorpo.insertAdjacentHTML("beforeend", `<div class="msg eu">${esc(p)}</div>${resposta}`);
+    chatCorpo.scrollTop = chatCorpo.scrollHeight;
+  }
+  bolinha.addEventListener("click", () => (painel.hidden ? abrirChat() : fecharChat()));
+  $("[data-chat-fechar]").addEventListener("click", fecharChat);
+  chatForm.addEventListener("submit", (e) => { e.preventDefault(); const p = chatForm.p.value.trim(); if (!p) return; chatForm.p.value = ""; perguntarNoChat(p); });
+  chatForm.p.addEventListener("keydown", (e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); chatForm.requestSubmit(); } });
+  chatCorpo.addEventListener("click", (e) => {
+    const ex = e.target.closest("[data-chat-ex]");
+    if (ex) { perguntarNoChat(ex.dataset.chatEx); return; }
+    if (e.target.closest("a")) fecharChat();
+  });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !painel.hidden) fecharChat(); });
+  // a bolinha some na própria página do Pergunte aos guias
+  const ajustarBolinha = () => { const naPagina = rotaAtual().guiaId === "perguntar"; bolinha.hidden = naPagina; if (naPagina) fecharChat(); };
+
   /* ---------- busca ---------- */
   let indice = null;
   function montarIndice() {
@@ -951,7 +996,11 @@
       const n = norm(txt);
       const t = norm(termo);
       let out = "", i = 0, k;
-      while ((k = n.indexOf(t, i)) !== -1) { out += txt.slice(i, k) + "<mark>" + txt.slice(k, k + t.length) + "</mark>"; i = k + t.length; }
+      while ((k = n.indexOf(t, i)) !== -1) {
+        let fim = k + t.length;
+        while (fim < n.length && /[a-z0-9]/.test(n[fim])) fim++; // completa a palavra ("hipogl" → "hipoglicemia")
+        out += txt.slice(i, k) + "<mark>" + txt.slice(k, fim) + "</mark>"; i = fim;
+      }
       return a + out + txt.slice(i);
     });
   }
@@ -1072,7 +1121,8 @@
   }
 
   /* ---------- início ---------- */
-  window.addEventListener("hashchange", () => { render(); if (!rotaAtual().q) window.scrollTo(0, 0); });
+  window.addEventListener("hashchange", () => { render(); ajustarBolinha(); if (!rotaAtual().q) window.scrollTo(0, 0); });
+  ajustarBolinha();
   carregarGuias()
     .then(() => { render(); })
     .catch((err) => { app.innerHTML = `<div class="card bloco"><h2>Não foi possível carregar o conteúdo</h2><p>${esc(err.message)}</p><p>Conecte-se à internet uma vez para baixar os guias.</p></div>`; });
