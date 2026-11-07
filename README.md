@@ -20,6 +20,10 @@ Terceiro documento incluído:
 
 > Ferramenta de apoio. O conteúdo foi transcrito do PDF oficial; confirme sempre a conduta conforme o quadro do paciente e as diretrizes vigentes.
 
+## Pergunte aos guias (offline)
+
+Em `#/perguntar` (botão **Pergunte aos guias** na tela inicial e **Pergunte ao guia** em cada guia) a pessoa escreve a dúvida em linguagem comum e o app mostra os trechos dos próprios guias que respondem, com tópico e página. Funciona sem internet e sem IA: o índice é montado a partir dos `topicos-N.js`, então todo guia novo entra automaticamente.
+
 ## Como usar no celular
 
 1. Abra o endereço do app no navegador (Chrome no Android / Safari no iPhone).

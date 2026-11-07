@@ -13,7 +13,7 @@
 
   const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   const norm = (s) => String(s).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
-  const textoPuro = (html) => String(html).replace(/<br\s*\/?>/gi, " ").replace(/<[^>]+>/g, " ").replace(/&nbsp;/g, " ").replace(/\s+/g, " ").trim();
+  const textoPuro = (html) => String(html).replace(/<br\s*\/?>/gi, " ").replace(/<[^>]+>/g, " ").replace(/&nbsp;/g, " ").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&amp;/g, "&").replace(/\s+/g, " ").trim();
   const slug = (s) => norm(textoPuro(s)).replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 
   const guia = (id) => GUIAS.find((g) => g.id === id);
@@ -39,12 +39,13 @@
     const h = decodeURIComponent(location.hash.replace(/^#\/?/, ""));
     const [caminho, qs] = h.split("?");
     const partes = caminho.split("/").filter(Boolean);
-    const q = new URLSearchParams(qs || "").get("q") || "";
-    return { guiaId: partes[0], topicoId: partes[1], q };
+    const params = new URLSearchParams(qs || "");
+    return { guiaId: partes[0], topicoId: partes[1], q: params.get("q") || "", params };
   }
 
   function render() {
-    const { guiaId, topicoId, q } = rotaAtual();
+    const { guiaId, topicoId, q, params } = rotaAtual();
+    if (guiaId === "perguntar") { montarTopo(null, "Pergunte aos guias"); return renderPerguntar(params); }
     const g = guiaId && guia(guiaId);
     montarTopo(g);
     if (!g) return renderBiblioteca();
@@ -53,10 +54,10 @@
     if (t) renderTopico(g, t, q); else renderGuia(g);
   }
 
-  function montarTopo(g) {
-    $("#topo-eyebrow").textContent = g ? "Guia + Enfermagem · offline" : "Protocolos para seguir à risca";
-    $("#topo-titulo").textContent = g ? g.titulo : "Guia + Enfermagem";
-    document.title = g ? `${g.titulo} · Guia + Enfermagem` : "Guia + Enfermagem";
+  function montarTopo(g, tituloPagina) {
+    $("#topo-eyebrow").textContent = g || tituloPagina ? "Guia + Enfermagem · offline" : "Protocolos para seguir à risca";
+    $("#topo-titulo").textContent = g ? g.titulo : tituloPagina || "Guia + Enfermagem";
+    document.title = g ? `${g.titulo} · Guia + Enfermagem` : tituloPagina ? `${tituloPagina} · Guia + Enfermagem` : "Guia + Enfermagem";
     const nav = $("#atalhos");
     nav.innerHTML = g && g.atalhos
       ? `<span class="rotulo">Acessos rápidos</span>` + g.atalhos.map((a) => `<a class="chip-topo" href="#/${g.id}/${a.topico}">${esc(a.rotulo)}</a>`).join("")
@@ -71,7 +72,7 @@
           <p class="eyebrow">Biblioteca</p>
           <h1>Guia + Enfermagem</h1>
           <p><b>Protocolos para seguir à risca.</b> Consulta rápida de condutas e posologias — funciona <b>sem internet</b> depois do primeiro acesso. Instale no celular para abrir como um aplicativo.</p>
-          <div class="acoes-hero"><button class="btn primario" data-abrir-busca>Pesquisar em todos os guias</button></div>
+          <div class="acoes-hero"><a class="btn primario" href="#/perguntar">Pergunte aos guias</a><button class="btn" data-abrir-busca>Pesquisar em todos os guias</button></div>
         </div>
         <aside class="como-usar">
           <strong>Como usar na rotina</strong>
@@ -129,7 +130,8 @@
               <p>Interface de consulta rápida baseada no guia <b>${esc(g.titulo.toUpperCase())}: ${esc(g.subtitulo.toUpperCase())}</b> para busca de diagnósticos, condutas e protocolos durante o atendimento.</p>
               <p class="muted"><small>Fonte: ${esc(g.fonte)}.</small></p>
               <div class="acoes-hero">
-                <button class="btn primario" data-abrir-busca>Pesquisar no guia</button>
+                <a class="btn primario" href="#/perguntar?g=${g.id}">Pergunte ao guia</a>
+                <button class="btn" data-abrir-busca>Pesquisar no guia</button>
                 ${g.pdf ? `<a class="btn" href="${g.pdf}" target="_blank" rel="noopener">Abrir PDF original</a>` : ""}
               </div>
             </div>
@@ -785,21 +787,139 @@
     });
   }
 
+  /* ---------- texto puro de uma seção (busca e "Pergunte aos guias") ---------- */
+  function partesSecao(s) {
+    const partes = [s.titulo || "", s.html || "", s.intro || "", s.nota || "", s.sim || "", s.nao || ""];
+    (s.itens || []).forEach((x) => partes.push(Array.isArray(x) ? x.join(": ") : x));
+    (s.grupos || []).forEach((gr) => { partes.push(gr.nome); gr.itens.forEach((it) => partes.push(it.f + ": " + (it.a || "") + " " + (it.c || ""))); });
+    if (s.head && s.rows) s.rows.forEach((r) => partes.push(r[0] && r[0].grupo ? r[0].grupo : r.map((c, k) => (k ? textoPuro(s.head[k] || "") + ": " : "") + c).join(" — ")));
+    (s.passos || []).forEach((p) => partes.push(p.pergunta, ...(p.itens || []), p.sim ? p.sim.html : "", p.nao ? p.nao.html : ""));
+    (s.criterios || []).forEach((c) => partes.push(c.nome, ...c.itens));
+    if (s.a && s.a.passos) partes.push(s.a.rotulo, ...s.a.passos, s.b.rotulo, ...s.b.passos);
+    return partes;
+  }
+
+  /* ---------- "Pergunte aos guias": respostas com os trechos dos próprios guias (offline, sem IA) ---------- */
+  const PARADAS = new Set(("a o as os um uma uns umas de do da dos das no na nos nas em por para pra com sem e ou que qual quais quanto quantos quanta quantas " +
+    "como quando onde porque por que se ser sao é eh esta estao foi tem ter deve devo devem pode posso podem fazer faco faz fica qual " +
+    "ao aos à às pelo pela pelos pelas me mim meu minha seu sua seus suas isso isto esse essa este esta ele ela eles elas voce voces " +
+    "mais menos muito muita sobre entre ate apos antes depois ja nao sim tambem ainda so apenas cada todo toda todos todas outro outra " +
+    "paciente pessoa pessoas usar uso usa usando dia dias caso casos").split(/\s+/));
+  const SINONIMOS = { hipo: "hipoglicemia", hiper: "hiperglicemia", dm: "diabetes", dm1: "dm1", dm2: "dm2", gestante: "gestacao", gravida: "gestacao", gravidez: "gestacao",
+    crianca: "crianca", criancas: "crianca", idoso: "idoso", idosa: "idoso", idosos: "idoso", geladeira: "refriger", caneta: "caneta", canetas: "caneta",
+    agulha: "agulha", agulhas: "agulha", dose: "dose", doses: "dose", atb: "antimicrobiano", antibiotico: "antimicrobiano", antibioticos: "antimicrobiano" };
+  const raiz = (w) => {
+    if (SINONIMOS[w]) return SINONIMOS[w];
+    if (w.length > 5 && /(coes|soes)$/.test(w)) return w.slice(0, -4);
+    if (w.length > 5 && /(cao|sao)$/.test(w)) return w.slice(0, -3);
+    if (w.length > 4 && /(es)$/.test(w) && !/(ses)$/.test(w)) return w.slice(0, -2);
+    if (w.length > 3 && /s$/.test(w)) return w.slice(0, -1);
+    return w;
+  };
+  const termosDe = (q) => [...new Set(norm(q).replace(/[^a-z0-9→,.%+-]+/g, " ").split(/\s+/)
+    .map((w) => w.replace(/^[,.]+|[,.]+$/g, "")).filter((w) => w && (w.length > 2 || /\d/.test(w)) && !PARADAS.has(w)).map(raiz))];
+
+  // números curtos ("2", "30") só contam como palavra inteira, para não casar com "192" ou "300"
+  const conta = (texto, x) => /^\d+$/.test(x) ? (texto.match(new RegExp("(^|[^0-9])" + x + "(?![0-9])", "g")) || []).length : texto.split(x).length - 1;
+  let trechos = null;
+  function montarTrechos() {
+    trechos = [];
+    for (const g of GUIAS) for (const t of topicosDe(g)) t.secoes.forEach((s, n) => {
+      const texto = textoPuro(partesSecao(s).join(" · "));
+      if (!texto) return;
+      trechos.push({ g, t, s, n, texto, ntexto: norm(texto), ncab: norm(t.titulo + " " + t.resumo + " " + textoPuro(s.titulo || "")) });
+    });
+  }
+
+  function responder(pergunta, gid) {
+    if (!trechos) montarTrechos();
+    const termos = termosDe(pergunta);
+    if (!termos.length) return { termos, res: [] };
+    const base = trechos.filter((c) => !gid || c.g.id === gid);
+    const N = base.length || 1;
+    const df = Object.fromEntries(termos.map((x) => [x, base.filter((c) => conta(c.ntexto, x) || conta(c.ncab, x)).length]));
+    const res = base.map((c) => {
+      let score = 0, achados = 0;
+      for (const x of termos) {
+        if (!df[x]) continue;
+        const idf = Math.log(1 + N / df[x]);
+        const noTexto = Math.min(4, conta(c.ntexto, x)), noCab = conta(c.ncab, x) ? 1 : 0;
+        if (noTexto || noCab) achados++;
+        score += idf * (noTexto + noCab * 3);
+      }
+      return { ...c, score: achados ? score * (achados / termos.length) ** 2 : 0, achados };
+    }).filter((c) => c.score > 0).sort((a, b) => b.score - a.score);
+    // no máximo 2 trechos do mesmo tópico, para variar as fontes
+    const porTopico = {}, out = [];
+    for (const c of res) { const k = c.g.id + "/" + c.t.id; porTopico[k] = (porTopico[k] || 0) + 1; if (porTopico[k] <= 2) out.push(c); if (out.length >= 6) break; }
+    return { termos, res: out };
+  }
+
+  function frasesRelevantes(c, termos) {
+    const frases = c.texto.split(/(?<=[.;!?])\s+|\s·\s/).map((f) => f.trim()).map((f) => f.replace(/^·\s*/, "")).filter((f) => f.length > 3);
+    const pont = frases.map((f, i) => ({ f, i, p: termos.filter((x) => conta(norm(f), x)).length })).filter((o) => o.p > 0);
+    pont.sort((a, b) => b.p - a.p || a.i - b.i);
+    const escolhidas = pont.slice(0, 3).sort((a, b) => a.i - b.i).map((o) => o.f);
+    let txt = (escolhidas.length ? escolhidas : frases.slice(0, 2)).join(" … ");
+    if (txt.length > 420) txt = txt.slice(0, 417) + "…";
+    let h = esc(txt);
+    termos.filter((x) => x.length > 2).forEach((x) => { h = destacarSemAcento(h, x); });
+    return h;
+  }
+
+  function renderPerguntar(params) {
+    const gid = params.get("g") || "";
+    const pergunta = params.get("p") || "";
+    const exemplos = ["Como tratar hipoglicemia nível 2?", "Dose inicial de NPH no DM2", "Por quanto tempo a insulina aberta pode ser usada?", "Quais contatos recebem BCG na hanseníase?", "Amoxicilina na otite em criança"];
+    let corpo = "";
+    if (pergunta) {
+      const { termos, res } = responder(pergunta, gid);
+      corpo = res.length ? `
+        <p class="muted" style="margin:0 0 10px">Trechos dos guias que respondem à sua pergunta, do mais relevante para o menos. Toque para abrir o tópico completo.</p>
+        ${res.map((c) => `
+          <a class="card resposta" href="#/${c.g.id}/${c.t.id}?q=${encodeURIComponent(termos.join(" "))}" style="--cor:${c.g.cor || "var(--accent)"}">
+            <span class="onde">${esc(c.g.sigla)} · ${esc(grupoDe(c.g, c.t.grupo).nome)}</span>
+            <strong>${esc(c.t.titulo)}${c.s.titulo ? ` — ${esc(textoPuro(c.s.titulo))}` : ""}</strong>
+            <p>${frasesRelevantes(c, termos)}</p>
+            <small class="muted">${c.t.fonte ? esc(c.t.fonte) : esc(c.g.titulo)} · pág. ${c.t.pag}</small>
+          </a>`).join("")}`
+        : `<div class="card bloco"><p>Não encontrei esse assunto ${gid ? "neste guia" : "nos guias"}. Tente outras palavras (ex.: o nome do medicamento ou da condição)${gid ? ` ou <a href="#/perguntar?p=${encodeURIComponent(pergunta)}">pergunte a todos os guias</a>` : ""}.</p></div>`;
+    }
+    app.innerHTML = `
+      <section class="card hero" style="grid-template-columns:1fr">
+        <div>
+          <p class="eyebrow">Funciona sem internet</p>
+          <h1>Pergunte ${gid && guia(gid) ? "ao guia" : "aos guias"}</h1>
+          <p>Escreva sua dúvida como falaria com um colega. A resposta vem <b>com o texto dos próprios guias</b>, indicando o tópico e a página — sem inteligência artificial, sem inventar nada.</p>
+          <form class="perguntar-form" data-perguntar>
+            <textarea name="p" rows="2" placeholder="Ex.: qual a dose de NPH para começar no DM2?" aria-label="Sua pergunta">${esc(pergunta)}</textarea>
+            <div class="perguntar-linha">
+              <select name="g" aria-label="Onde procurar">
+                <option value="">Todos os guias</option>
+                ${GUIAS.map((g) => `<option value="${g.id}" ${g.id === gid ? "selected" : ""}>${esc(g.titulo)}</option>`).join("")}
+              </select>
+              <button class="btn primario" type="submit">Perguntar</button>
+            </div>
+          </form>
+          ${pergunta ? "" : `<div class="exemplos">${exemplos.map((x) => `<button class="chip-ex" type="button" data-exemplo="${esc(x)}">${esc(x)}</button>`).join("")}</div>`}
+        </div>
+      </section>
+      <div class="respostas">${corpo}</div>`;
+    const form = $("[data-perguntar]", app);
+    const ir = (p, g) => { location.hash = `#/perguntar?${new URLSearchParams({ ...(g ? { g } : {}), p }).toString()}`; };
+    form.addEventListener("submit", (e) => { e.preventDefault(); const p = form.p.value.trim(); if (p) ir(p, form.g.value); });
+    form.p.addEventListener("keydown", (e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); form.requestSubmit(); } });
+    $$("[data-exemplo]", app).forEach((b) => b.addEventListener("click", () => ir(b.dataset.exemplo, form.g.value)));
+    if (!pergunta) setTimeout(() => form.p.focus(), 30);
+  }
+
   /* ---------- busca ---------- */
   let indice = null;
   function montarIndice() {
     indice = [];
     for (const g of GUIAS) for (const t of topicosDe(g)) {
       const partes = [t.titulo, t.resumo];
-      for (const s of t.secoes) {
-        partes.push(s.titulo || "", s.html || "", s.intro || "", s.nota || "", s.sim || "", s.nao || "");
-        (s.itens || []).forEach((x) => partes.push(x));
-        (s.grupos || []).forEach((gr) => { partes.push(gr.nome); gr.itens.forEach((it) => partes.push(it.f, it.a || "", it.c || "")); });
-        (s.rows || []).forEach((r) => r.forEach((c) => partes.push(typeof c === "string" ? c : c.grupo)));
-        (s.passos || []).forEach((p) => partes.push(p.pergunta, ...(p.itens || []), p.sim ? p.sim.html : "", p.nao ? p.nao.html : ""));
-        (s.criterios || []).forEach((c) => partes.push(c.nome, ...c.itens));
-        if (s.a && s.a.passos) partes.push(...s.a.passos, ...s.b.passos);
-      }
+      for (const s of t.secoes) partes.push(...partesSecao(s));
       const texto = textoPuro(partes.join(" · "));
       indice.push({ g, t, texto, ntexto: norm(texto), ntitulo: norm(t.titulo + " " + t.resumo) });
     }

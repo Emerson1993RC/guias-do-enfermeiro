@@ -309,3 +309,16 @@ mark.destaque { background: #ffe58a; color: #1a1300; border-radius: 3px; }
   .card { box-shadow: none; }
 }
 @media (max-width: 900px) { .so-desktop { display: none !important; } }
+
+/* Pergunte aos guias */
+.perguntar-form { margin-top: 14px; display: grid; gap: 10px; }
+.perguntar-form textarea { width: 100%; box-sizing: border-box; resize: vertical; font: inherit; font-size: 16px; padding: 12px 14px; border-radius: 14px; border: 1px solid var(--line); background: var(--surface-2); color: var(--ink); }
+.perguntar-linha { display: flex; gap: 10px; flex-wrap: wrap; }
+.perguntar-linha select { flex: 1 1 180px; min-width: 0; font: inherit; padding: 10px 12px; border-radius: 12px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); }
+.exemplos { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.chip-ex { border: 1px solid var(--line); background: var(--surface-2); color: var(--ink-2); border-radius: 999px; padding: 6px 12px; font: inherit; font-size: 13.5px; cursor: pointer; text-align: left; }
+.respostas { display: grid; gap: 12px; margin-top: 16px; }
+.resposta { display: block; padding: 14px 16px; text-decoration: none; color: var(--ink); border-left: 4px solid var(--cor); }
+.resposta .onde { font-size: 11.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--cor); font-weight: 700; }
+.resposta strong { display: block; margin: 4px 0 6px; font-size: 16px; }
+.resposta p { margin: 0 0 6px; color: var(--ink-2); line-height: 1.5; }
