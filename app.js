@@ -240,6 +240,7 @@
       case "hipo": return renderHipo(s, id);
       case "insulina": return renderInsulina(s, id);
       case "fichas": return renderFichasSecao(s, id);
+      case "links": return `<section class="card bloco" id="${id}">${s.titulo ? `<h2>${s.titulo}</h2>` : ""}${blocoLinks(s.itens, "Acesse na fonte oficial")}</section>`;
       default: return "";
     }
   }
@@ -864,7 +865,7 @@
   /* ---------- texto puro de uma seção (busca e "Pergunte aos guias") ---------- */
   function partesSecao(s) {
     const partes = [s.titulo || "", s.html || "", s.intro || "", s.nota || "", s.sim || "", s.nao || ""];
-    (s.itens || []).forEach((x) => partes.push(Array.isArray(x) ? x.join(": ") : x));
+    (s.itens || []).forEach((x) => partes.push(Array.isArray(x) ? x.join(": ") : x && x.url ? x.titulo + ". " + (x.desc || "") : x));
     (s.grupos || []).forEach((gr) => { partes.push(gr.nome); gr.itens.forEach((it) => partes.push(it.f + ": " + (it.a || "") + " " + (it.c || ""))); });
     if (s.head && s.rows) s.rows.forEach((r) => partes.push(r[0] && r[0].grupo ? r[0].grupo : r.map((c, k) => (k ? textoPuro(s.head[k] || "") + ": " : "") + c).join(" — ")));
     (s.passos || []).forEach((p) => partes.push(p.pergunta, ...(p.itens || []), p.sim ? p.sim.html : "", p.nao ? p.nao.html : ""));

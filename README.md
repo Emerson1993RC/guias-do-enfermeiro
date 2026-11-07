@@ -19,7 +19,7 @@ Terceiro documento incluído:
 **Insulinoterapia na APS** (Ministério da Saúde · CONASEMS, 2026) — 34 tópicos em 6 grupos (diabetes mellitus, insulinas no SUS, organização do cuidado na APS, uso seguro e dispositivos, preparo e técnica de aplicação, utilitários), com calculadoras de NPH/glargina/fator de correção, carboidrato na hipoglicemia infantil e checklist da equipe. Novos temas entram em `guias/insulinoterapia/topicos-N.js` conforme forem liberados.
 
 Quarto documento incluído:
-**Mpox — notificação, investigação e coleta** (fichas e-SUS Sinan do Ministério da Saúde, ficha complementar da SESA-CE e formulário do LACEN) — 7 tópicos.
+**Mpox** (Nota Técnica Mpox 2026 da SESA-CE, fichas e-SUS Sinan do Ministério da Saúde, ficha complementar da SESA-CE e formulário FOR.545.011 do Lacen-CE) — 12 tópicos, incluindo definição de caso, contatos e vacinação.
 
 ## Fichas para baixar
 

@@ -104,32 +104,39 @@ self.GUIAS = [
     id: "mpox",
     sigla: "MPX",
     titulo: "Mpox",
-    subtitulo: "Notificação, investigação e coleta de amostras",
-    fonte: "Ministério da Saúde (e-SUS Sinan) · SESA-CE · LACEN",
+    subtitulo: "Nota Técnica Mpox 2026, notificação, coleta, contatos e vacinação",
+    fonte: "SESA-CE (Nota Técnica Mpox 2026) · Ministério da Saúde (e-SUS Sinan) · Lacen-CE",
+    pdf: "guias/mpox/nota-tecnica-mpox-sesa-ce-2026.pdf",
     cor: "#c0392b",
-    notificacao: "Doença de notificação compulsória (e-SUS Sinan)",
+    notificacao: "Notificação compulsória imediata (e-SUS Sinan em até 24 h)",
     arquivos: ["guias/mpox/topicos-1.js"],
     fichas: [
       { titulo: "Ficha Individual de Notificação — e-SUS Sinan", desc: "Primeira ficha a preencher: dados da notificação, identificação, agravo (CID), sinais e sintomas e início dos sintomas. Versão 01/03/2023.", arquivo: "guias/mpox/fichas/ficha-notificacao-esus-sinan.pdf", tipo: "PDF", tamanho: "2,1 MB", origem: "Ministério da Saúde" },
       { titulo: "Ficha de Investigação de Mpox — e-SUS Sinan (V003)", desc: "Hospitalização, laboratório, diagnósticos diferenciais, exposição de 21 dias e classificação final. Versão 25/06/2025.", arquivo: "guias/mpox/fichas/ficha-investigacao-mpox-v003-2025.pdf", tipo: "PDF", tamanho: "1,5 MB", origem: "Ministério da Saúde" },
-      { titulo: "Ficha de Investigação Complementar de Mpox", desc: "Percurso assistencial, isolamento, exposições, parceiros e contatos dos últimos 21 dias. Editável no Word.", arquivo: "guias/mpox/fichas/ficha-investigacao-complementar-mpox-sesa-ce.docx", tipo: "Word", tamanho: "1,0 MB", origem: "Secretaria da Saúde do Ceará" },
-      { titulo: "Formulário para Diagnóstico de Mpox Ampliado (FOR.545.011)", desc: "Requisição ao LACEN para Orthopoxvírus, Mpox e Varicela zoster, com critérios de inclusão.", arquivo: "guias/mpox/fichas/formulario-diagnostico-mpox-ampliado-lacen.pdf", tipo: "PDF", tamanho: "88 KB", origem: "LACEN" }
+      { titulo: "Ficha de Investigação Complementar de Mpox", desc: "Para casos confirmados: percurso assistencial, isolamento, exposições, parceiros e contatos dos últimos 21 dias. Editável no Word.", arquivo: "guias/mpox/fichas/ficha-investigacao-complementar-mpox-sesa-ce.docx", tipo: "Word", tamanho: "1,0 MB", origem: "Secretaria da Saúde do Ceará" },
+      { titulo: "Formulário para Diagnóstico de Mpox Ampliado (FOR.545.011)", desc: "Requisição ao LACEN para Orthopoxvírus, Mpox e Varicela zoster, com critérios de inclusão.", arquivo: "guias/mpox/fichas/formulario-diagnostico-mpox-ampliado-lacen.pdf", tipo: "PDF", tamanho: "88 KB", origem: "Lacen-CE" }
     ],
     links: [
-      { titulo: "Saúde Ceará — nova nota técnica sobre Mpox (06/11/2026)", desc: "Notícia da Secretaria da Saúde do Ceará com as orientações de prevenção e a nota técnica.", url: "https://www.ce.gov.br/saude/2026/11/06/saude-ceara-reforca-orientacoes-para-prevencao-da-mpox-em-nova-nota-tecnica/" },
-      { titulo: "e-SUS Sinan — notificar on-line", desc: "Sistema oficial para registrar a notificação e a investigação (login gov.br).", url: "https://esussinan.saude.gov.br/login" },
-      { titulo: "Manual de instruções do e-SUS Sinan", desc: "Ministério da Saúde: como preencher a notificação e a ficha de investigação.", url: "https://www.gov.br/saude/pt-br/centrais-de-conteudo/publicacoes/svsa/vigilancia/e-sus-sinan-manual-de-instrucoes" },
-      { titulo: "Ministério da Saúde — Mpox", desc: "Notícias, notas e atualizações oficiais sobre Mpox.", url: "https://www.gov.br/saude/pt-br/assuntos/noticias/mpox" }
+      { titulo: "Nota Técnica Mpox 2026 — notícia da Saúde Ceará (06/11/2026)", desc: "Página da Secretaria da Saúde do Ceará sobre a nova nota técnica.", url: "https://www.ce.gov.br/saude/2026/11/06/saude-ceara-reforca-orientacoes-para-prevencao-da-mpox-em-nova-nota-tecnica/" },
+      { titulo: "e-SUS Sinan — notificar on-line", desc: "Sistema oficial para a notificação e a investigação (login gov.br).", url: "https://esussinan.saude.gov.br/login" },
+      { titulo: "Ficha e-SUS de mpox (link da nota técnica)", desc: "Anexo da nota técnica com a ficha de notificação.", url: "https://drive.google.com/file/d/1EEgxr38160OpT3WPCjmRiFCep-UNlnzL/view" },
+      { titulo: "Ficha de Investigação Complementar — Word e PDF", desc: "Versões disponibilizadas pela SESA-CE.", url: "https://docs.google.com/document/d/1k2swXdsnxHWz-I67rlkAxjqf62j5QLKF/edit" },
+      { titulo: "Formulários GAL (FOR.545.011)", desc: "Pasta do Lacen-CE indicada pela nota técnica.", url: "https://drive.google.com/drive/folders/1W2S5wbQ0pPR9Yh_UnXQXlEdRtk02TYhJ" },
+      { titulo: "Manual de instruções do e-SUS Sinan", desc: "Ministério da Saúde: preenchimento da notificação e da investigação.", url: "https://www.gov.br/saude/pt-br/centrais-de-conteudo/publicacoes/svsa/vigilancia/e-sus-sinan-manual-de-instrucoes" }
     ],
     grupos: [
-      { id: "notificacao", sigla: "NT", eyebrow: "Fichas e passo a passo", nome: "Notificação" },
-      { id: "laboratorio", sigla: "LB", eyebrow: "Amostras, LACEN e diferenciais", nome: "Coleta e laboratório" },
-      { id: "investigacao", sigla: "IV", eyebrow: "Contatos e encerramento", nome: "Investigação" }
+      { id: "clinica", sigla: "CL", eyebrow: "Definição de caso, doença e prevenção", nome: "Doença e definição de caso" },
+      { id: "notificacao", sigla: "NT", eyebrow: "Fluxo e fichas", nome: "Notificação" },
+      { id: "laboratorio", sigla: "LB", eyebrow: "Coleta, GAL e diferenciais", nome: "Coleta e laboratório" },
+      { id: "investigacao", sigla: "IV", eyebrow: "Contatos e encerramento", nome: "Investigação" },
+      { id: "vacinacao", sigla: "VC", eyebrow: "Jynneos", nome: "Vacinação" }
     ],
     atalhos: [
+      { rotulo: "Definição de caso", topico: "definicao-caso" },
       { rotulo: "Como notificar", topico: "como-notificar" },
-      { rotulo: "Coleta e LACEN", topico: "coleta-laboratorio" },
-      { rotulo: "Contatos (21 dias)", topico: "investigacao-contatos" }
+      { rotulo: "Coleta e GAL", topico: "coleta-laboratorio" },
+      { rotulo: "Contatos", topico: "contatos" },
+      { rotulo: "Vacinação", topico: "vacinacao" }
     ]
   }
 ];
