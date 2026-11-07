@@ -805,15 +805,13 @@
     "ao aos à às pelo pela pelos pelas me mim meu minha seu sua seus suas isso isto esse essa este esta ele ela eles elas voce voces " +
     "mais menos muito muita sobre entre ate apos antes depois ja nao sim tambem ainda so apenas cada todo toda todos todas outro outra " +
     "paciente pessoa pessoas usar uso usa usando dia dias caso casos").split(/\s+/));
-  const SINONIMOS = { hipo: "hipoglicemia", hiper: "hiperglicemia", dm: "diabetes", dm1: "dm1", dm2: "dm2", gestante: "gestacao", gravida: "gestacao", gravidez: "gestacao",
-    crianca: "crianca", criancas: "crianca", idoso: "idoso", idosa: "idoso", idosos: "idoso", geladeira: "refriger", caneta: "caneta", canetas: "caneta",
-    agulha: "agulha", agulhas: "agulha", dose: "dose", doses: "dose", atb: "antimicrobiano", antibiotico: "antimicrobiano", antibioticos: "antimicrobiano" };
+  // radical simples: os 6 primeiros caracteres de palavras longas ("aplicar" e "aplicação" → "aplica")
+  const SINONIMOS = { hipo: "hipogl", hiper: "hiperg", dm: "diabet", gestante: "gestac", gestantes: "gestac", gravida: "gestac", gravidas: "gestac", gravidez: "gestac",
+    crianca: "crianc", criancas: "crianc", idosa: "idoso", idosos: "idoso", idosas: "idoso", geladeira: "refrig", atb: "antimi", antibiotico: "antimi", antibioticos: "antimi" };
   const raiz = (w) => {
     if (SINONIMOS[w]) return SINONIMOS[w];
-    if (w.length > 5 && /(coes|soes)$/.test(w)) return w.slice(0, -4);
-    if (w.length > 5 && /(cao|sao)$/.test(w)) return w.slice(0, -3);
-    if (w.length > 4 && /(es)$/.test(w) && !/(ses)$/.test(w)) return w.slice(0, -2);
-    if (w.length > 3 && /s$/.test(w)) return w.slice(0, -1);
+    if (w.length > 6) return w.slice(0, 6);
+    if (w.length > 3 && /s$/.test(w) && !/\d/.test(w)) return w.slice(0, -1);
     return w;
   };
   const termosDe = (q) => [...new Set(norm(q).replace(/[^a-z0-9→,.%+-]+/g, " ").split(/\s+/)

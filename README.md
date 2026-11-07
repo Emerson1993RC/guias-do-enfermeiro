@@ -16,7 +16,7 @@ Segundo documento incluído:
 **Hanseníase — Protocolo Clínico e Diretrizes Terapêuticas (PCDT) da Hanseníase** (Ministério da Saúde, 2022 — Portaria SCTIE/MS nº 67/2022) — 23 tópicos em 5 grupos (diagnóstico, PQT-U, reações, seguimento e contatos, utilitários), com calculadora de dose da PQT-U, cronograma de desmame de prednisona e calculadora de grau de incapacidade física (GIF/OMP).
 
 Terceiro documento incluído:
-**Insulinoterapia na APS** (Ministério da Saúde · CONASEMS, 2026) — 27 tópicos em 5 grupos (diabetes mellitus, insulinas no SUS, organização do cuidado na APS, uso seguro e dispositivos, utilitários), com calculadoras de NPH/glargina/fator de correção, carboidrato na hipoglicemia infantil e checklist da equipe. Novos temas entram em `guias/insulinoterapia/topicos-N.js` conforme forem liberados.
+**Insulinoterapia na APS** (Ministério da Saúde · CONASEMS, 2026) — 34 tópicos em 6 grupos (diabetes mellitus, insulinas no SUS, organização do cuidado na APS, uso seguro e dispositivos, preparo e técnica de aplicação, utilitários), com calculadoras de NPH/glargina/fator de correção, carboidrato na hipoglicemia infantil e checklist da equipe. Novos temas entram em `guias/insulinoterapia/topicos-N.js` conforme forem liberados.
 
 > Ferramenta de apoio. O conteúdo foi transcrito do PDF oficial; confirme sempre a conduta conforme o quadro do paciente e as diretrizes vigentes.
 

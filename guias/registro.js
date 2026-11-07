@@ -73,19 +73,22 @@ self.GUIAS = [
     arquivos: [
       "guias/insulinoterapia/topicos-1.js",
       "guias/insulinoterapia/topicos-2.js",
-      "guias/insulinoterapia/topicos-3.js"
+      "guias/insulinoterapia/topicos-3.js",
+      "guias/insulinoterapia/topicos-4.js"
     ],
     grupos: [
       { id: "diabetes", sigla: "DM", eyebrow: "Diagnóstico, metas e tratamento", nome: "Diabetes mellitus" },
       { id: "insulinas", sigla: "IN", eyebrow: "Tipos, apresentações e acesso", nome: "Insulinas no SUS" },
       { id: "aps", sigla: "AP", eyebrow: "Organização do cuidado", nome: "Insulinoterapia na APS" },
       { id: "dispositivos", sigla: "DI", eyebrow: "Hipoglicemia, canetas, conservação e descarte", nome: "Uso seguro e dispositivos" },
+      { id: "tecnica", sigla: "TA", eyebrow: "Agulhas, locais, caneta e erros de dose", nome: "Preparo e técnica de aplicação" },
       { id: "utilitarios", sigla: "UC", eyebrow: "Apoio à decisão", nome: "Utilitários clínicos" }
     ],
     atalhos: [
       { rotulo: "Hipoglicemia", topico: "hipoglicemia" },
       { rotulo: "Início de NPH", topico: "insulina-dm2" },
       { rotulo: "NPH → glargina", topico: "transicao-glargina" },
+      { rotulo: "Técnica com caneta", topico: "caneta-passo-a-passo" },
       { rotulo: "Metas", topico: "metas-glicemicas" }
     ]
   }

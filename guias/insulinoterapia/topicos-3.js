@@ -193,7 +193,7 @@
       ["<b>Descartável</b>", "Vem preenchida de fábrica (geralmente 300 UI = 3 mL); descartada inteira ao terminar ou ao vencer o prazo"],
       ["<b>Reutilizável</b>", "Troca-se o refil de 3 mL. Partes: corpo (janela de dose, seletor, botão de injeção, êmbolo), suporte do carpule e tampa. Exemplos no SUS: Biopemm (glargina) e GlobalX U2 (NPH e regular)"]
     ], nota: "Usar só refis compatíveis com o modelo da caneta e nunca transferir insulina entre dispositivos. A oferta de canetas reutilizáveis ou descartáveis depende das aquisições do Ministério da Saúde. Bomba de insulina não está incorporada ao SUS." },
-    { t: "box", v: "info", titulo: "Lembre", html: "<p>Erros de técnica comprometem a absorção, aumentam a variabilidade e desmotivam a adesão, mesmo com a melhor caneta. Diferenças entre modelos e solução de falhas entram no tema “Preparação e técnica de aplicação”, a ser acrescentado a este guia.</p>" }
+    { t: "box", v: "info", titulo: "Lembre", html: "<p>Erros de técnica comprometem a absorção, aumentam a variabilidade e desmotivam a adesão, mesmo com a melhor caneta. Passo a passo, troca do refil e solução de falhas: ver <a href=\"#/insulinoterapia/caneta-passo-a-passo\">Passo a passo com caneta</a> e <a href=\"#/insulinoterapia/caneta-reutilizavel\">Caneta reutilizável</a>.</p>" }
   ]
 },
 {
